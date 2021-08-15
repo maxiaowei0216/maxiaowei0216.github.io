@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"www.maxiaowei.tech","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"valine","storage":true,"lazyload":false,"nav":null,"activeClass":"valine"},"algolia":{"appID":"T7TLZU5A5Q","apiKey":"9bc09b3c19296d4e5e7fc532e4fb0280","indexName":"hexo_next","hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="本章主要介绍终端的相关概念，及一些修改终端操作的函数。 概念工作模式主要有以下两种工作模式：  规范模式（Canonical mode）输入处理。在此模式下，对于终端的输入以行为单位进行处理。每次读取最多返回一行。这是默认的模式。 非规范模式（Noncanonical mode）输入处理。输入字符不装配成行，一些特殊字符（如Ctrl+D）以不会进行处理。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="UNIX环境高级编程（18-终端I&#x2F;O）">
+<meta property="og:url" content="https://www.maxiaowei.tech/posts/255074044.html">
+<meta property="og:site_name" content="Xiaowei&#39;s Blog">
+<meta property="og:description" content="本章主要介绍终端的相关概念，及一些修改终端操作的函数。 概念工作模式主要有以下两种工作模式：  规范模式（Canonical mode）输入处理。在此模式下，对于终端的输入以行为单位进行处理。每次读取最多返回一行。这是默认的模式。 非规范模式（Noncanonical mode）输入处理。输入字符不装配成行，一些特殊字符（如Ctrl+D）以不会进行处理。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://hexoa.oss-cn-shanghai.aliyuncs.com/img/20201231110354.png">
+<meta property="og:image" content="https://hexoa.oss-cn-shanghai.aliyuncs.com/img/20201231110442.png">
+<meta property="og:image" content="https://hexoa.oss-cn-shanghai.aliyuncs.com/img/20201231110512.png">
+<meta property="og:image" content="https://hexoa.oss-cn-shanghai.aliyuncs.com/img/20201231110532.png">
+<meta property="og:image" content="https://hexoa.oss-cn-shanghai.aliyuncs.com/img/20201231150852.png">
+<meta property="og:image" content="https://hexoa.oss-cn-shanghai.aliyuncs.com/img/20201231151204.png">
+<meta property="og:image" content="https://hexoa.oss-cn-shanghai.aliyuncs.com/img/20210104112334.png">
+<meta property="article:published_time" content="2020-12-30T07:59:07.000Z">
+<meta property="article:modified_time" content="2021-08-14T11:08:27.441Z">
+<meta property="article:author" content="Ma Xiaowei">
+<meta property="article:tag" content="apue">
+<meta property="article:tag" content="Terminal">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://hexoa.oss-cn-shanghai.aliyuncs.com/img/20201231110354.png">
+
+<link rel="canonical" href="https://www.maxiaowei.tech/posts/255074044.html">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>UNIX环境高级编程（18-终端I/O） | Xiaowei's Blog</title>
+  
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?75c77a06128d0e6c104a661fbbe692bf";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Xiaowei's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container"></div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="algolia-results">
+  <div id="algolia-stats"></div>
+  <div id="algolia-hits"></div>
+  <div id="algolia-pagination" class="algolia-pagination"></div>
+</div>
+
+      
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://www.maxiaowei.tech/posts/255074044.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Ma Xiaowei">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Xiaowei's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          UNIX环境高级编程（18-终端I/O）
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-12-30 15:59:07" itemprop="dateCreated datePublished" datetime="2020-12-30T15:59:07+08:00">2020-12-30</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-08-14 19:08:27" itemprop="dateModified" datetime="2021-08-14T19:08:27+08:00">2021-08-14</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Linux/" itemprop="url" rel="index"><span itemprop="name">Linux</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/posts/255074044.html#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/posts/255074044.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>4.8k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>4 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>本章主要介绍终端的相关概念，及一些修改终端操作的函数。</p>
+<h1 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h1><h2 id="工作模式"><a href="#工作模式" class="headerlink" title="工作模式"></a>工作模式</h2><p>主要有以下两种工作模式：</p>
+<ul>
+<li>规范模式（Canonical mode）输入处理。在此模式下，对于终端的输入以行为单位进行处理。每次读取最多返回一行。这是默认的模式。</li>
+<li>非规范模式（Noncanonical mode）输入处理。输入字符不装配成行，一些特殊字符（如Ctrl+D）以不会进行处理。</li>
+</ul>
+<span id="more"></span>
+
+<p>这两种模式在后面会有详细解释。</p>
+<h2 id="终端特性"><a href="#终端特性" class="headerlink" title="终端特性"></a>终端特性</h2><p>在结构<code>termios</code>中定义了终端设备全部特性的标志，在其中又将各种标志进行分类，其结构大体如下：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">termios</span> &#123;</span></span><br><span class="line">  <span class="keyword">tcflag_t</span>  c_iflag;      <span class="comment">/* input flags */</span></span><br><span class="line">  <span class="keyword">tcflag_t</span>  c_oflag;      <span class="comment">/* output flags */</span></span><br><span class="line">  <span class="keyword">tcflag_t</span>  c_cflag;      <span class="comment">/* control flags */</span></span><br><span class="line">  <span class="keyword">tcflag_t</span>  c_lflag;      <span class="comment">/* local flags */</span></span><br><span class="line">  <span class="keyword">cc_t</span>      c_cc[NCCS];   <span class="comment">/* control characters */</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p> 输入标志通过终端驱动程序控制字符的输入（如剥除输入字节的第8位，允许输入奇偶校验），输出标志控制驱动程序输出（如将换行符转换为CR/LF），控制标志影响RS-232串行线（如忽略调制解调器的状态线），本地标志影响驱动程序和用户之间的接口（如开关回显）。</p>
+</blockquote>
+<p><code>c_cc</code>数组则包含了所有可以更改的特殊字符。</p>
+<p>相关标志及其说明见如下各图：</p>
+<p><img src="https://hexoa.oss-cn-shanghai.aliyuncs.com/img/20201231110354.png" alt="c_cflag terminal flags"></p>
+<p><img src="https://hexoa.oss-cn-shanghai.aliyuncs.com/img/20201231110442.png" alt="c_iflag terminal flags"></p>
+<p><img src="https://hexoa.oss-cn-shanghai.aliyuncs.com/img/20201231110512.png" alt="c_lflag terminal flags"></p>
+<p><img src="https://hexoa.oss-cn-shanghai.aliyuncs.com/img/20201231110532.png" alt="c_oflag terminal flags"></p>
+<h1 id="配置终端"><a href="#配置终端" class="headerlink" title="配置终端"></a>配置终端</h1><p>主要有13个函数可以对终端进行操作，其中的<code>tcgetattr</code>和<code>tcsetattr</code>函数用于读取/设置上一节列出的各个标志，因此实际上终端有非常多的配置选项，各个函数之间的关系可以参考下图：</p>
+<p><img src="https://hexoa.oss-cn-shanghai.aliyuncs.com/img/20201231150852.png" alt="Relationships among the terminal-related functions"></p>
+<h2 id="获得和设置终端属性"><a href="#获得和设置终端属性" class="headerlink" title="获得和设置终端属性"></a>获得和设置终端属性</h2><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;termios.h&gt;</span></span></span><br><span class="line"><span class="comment">// Both return: 0 if OK, −1 on error</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">tcgetattr</span><span class="params">(<span class="keyword">int</span> fd, struct termios *termptr)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">tcsetattr</span><span class="params">(<span class="keyword">int</span> fd, <span class="keyword">int</span> opt, <span class="keyword">const</span> struct termios *termptr)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<p>这两个函数用于检测和修改各种终端选项标志和特殊字符，它们都使用了前述的<code>termios</code>结构用于获取和设置终端属性。另外，这两个函数只针对终端进行操作，因此<code>fd</code>没有引用终端设备就会出错返回-1，且将errno设置为ENOTTY。</p>
+<p>set函数的<code>opt</code>参数指定新的属性的起作用时间，有如下几个选项：</p>
+<ul>
+<li>TCSANOW：立即改变</li>
+<li>TCSADRAIN：发送所有输出后才发生更改</li>
+<li>TCSAFLUSH：与TCSADRAIN相似，但是所有未读的输入都会被丢弃</li>
+</ul>
+<p><strong>注意：</strong></p>
+<p>set函数只要执行了一种所要求的动作就会返回成功，因此有必要在后面通过get函数检查是否所有的设置都生效了。</p>
+<h2 id="特殊输入字符"><a href="#特殊输入字符" class="headerlink" title="特殊输入字符"></a>特殊输入字符</h2><p>上一节提到<code>c_cc</code>数组包含了特殊字符，下面就是这些特殊字符：</p>
+<p><img src="https://hexoa.oss-cn-shanghai.aliyuncs.com/img/20201231151204.png" alt="Summary of special terminal input characters"></p>
+<p>其中，<code>c_cc subscript</code>列表示该字符对应的数组下标值，有了它可以方便地修改对应的特殊字符，如果想要禁止使用某个特殊字符，只需将其设置为<code>fpathconf(fd, _PC_VDISABLE)</code>的返回值即可。示例代码如下：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&quot;apue.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;termios.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  <span class="class"><span class="keyword">struct</span> <span class="title">termios</span> <span class="title">term</span>;</span></span><br><span class="line">  <span class="keyword">long</span> vdisable;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> (isatty(STDIN_FILENO) == <span class="number">0</span>) &#123;</span><br><span class="line">    err_quit(<span class="string">&quot;standard input is not a terminal device&quot;</span>);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">if</span> ((vdisable = fpathconf(STDIN_FILENO, _PC_VDISABLE)) &lt; <span class="number">0</span>) &#123;</span><br><span class="line">    err_quit(<span class="string">&quot;fpathconf error&quot;</span>);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">if</span> (tcgetattr(STDIN_FILENO, &amp;term) &lt; <span class="number">0</span>) &#123;</span><br><span class="line">    err_sys(<span class="string">&quot;tcgetattr error&quot;</span>);</span><br><span class="line">  &#125;</span><br><span class="line">  term.c_cc[VINTR] = vdisable; <span class="comment">/* 禁用INTR */</span></span><br><span class="line">  term.c_cc[VEOF] = <span class="number">2</span>;         <span class="comment">/* ctrl+B -&gt; EOF */</span></span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> (tcsetattr(STDIN_FILENO, TCSAFLUSH, &amp;term) &lt; <span class="number">0</span>) &#123;</span><br><span class="line">    err_sys(<span class="string">&quot;tcsetattr error&quot;</span>);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="波特率函数"><a href="#波特率函数" class="headerlink" title="波特率函数"></a>波特率函数</h2><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Both return: baud rate value</span></span><br><span class="line"><span class="function"><span class="keyword">speed_t</span> <span class="title">cfgetispeed</span><span class="params">(<span class="keyword">const</span> struct termios *termptr)</span></span>;   <span class="comment">/* 输入 */</span></span><br><span class="line"><span class="function"><span class="keyword">speed_t</span> <span class="title">cfgetospeed</span><span class="params">(<span class="keyword">const</span> struct termios *termptr)</span></span>;   <span class="comment">/* 输出 */</span></span><br><span class="line"><span class="comment">// Both return: 0 if OK, −1 on error</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">cfsetispeed</span><span class="params">(struct termios *termptr, <span class="keyword">speed_t</span> speed)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">cfsetospeed</span><span class="params">(struct termios *termptr, <span class="keyword">speed_t</span> speed)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<p>这几个函数用于获取和设置输入/输出的波特率（位/秒）。速度值是形如B0、B50、B75……的常量值。</p>
+<p>需要注意的是，速率值保存在<code>termios</code>结构中，但是并没有规定其使用的字段，所以无法通过该结构直接获取或设置速率，而只能通过以上几个函数。</p>
+<p>如果想使用get函数，在这之前需要先调用<code>tcgetattr</code>获取当前的<code>termios</code>结构变量，然后传入get函数中以获得速率。同理，在设置速率时，调用完set函数后，需要调用<code>tcsetattr</code>函数以使该改变生效。</p>
+<h2 id="行控制函数"><a href="#行控制函数" class="headerlink" title="行控制函数"></a>行控制函数</h2><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// All four return: 0 if OK, −1 on error</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">tcdrain</span><span class="params">(<span class="keyword">int</span> fd)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">tcflow</span><span class="params">(<span class="keyword">int</span> fd, <span class="keyword">int</span> action)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">tcflush</span><span class="params">(<span class="keyword">int</span> fd, <span class="keyword">int</span> <span class="built_in">queue</span>)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">tcsendbreak</span><span class="params">(<span class="keyword">int</span> fd, <span class="keyword">int</span> duration)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<p>这4个函数要求<code>fd</code>引用的是终端设备，否则出错返回-1，且errno设置为ENOTTY。</p>
+<p><code>tcdrain</code>函数等待所有输出都被传递.</p>
+<p><code>tcflow</code>函数控制输入和输出流。由<code>action</code>参数进行控制：</p>
+<ul>
+<li>TCOOFF：暂停输出（输出被挂起）</li>
+<li>TCOON：重启被挂起的输出</li>
+<li>TCIOFF：发送STOP字符，使终端停止向系统发送数据</li>
+<li>TCION：发送STRAT字符，使终端恢复发送数据</li>
+</ul>
+<p><code>tcflush</code>函数冲洗（丢弃）输入缓冲区（终端驱动程序已收到但用户程序未读取的数据）或输出缓冲区（用户程序写入但未被传递的数据）。<code>queue</code>参数决定哪个缓冲区中的数据被冲洗：</p>
+<ul>
+<li>TCIFLUSH：冲洗输入队列</li>
+<li>TCOFLUSH：冲洗输出队列</li>
+<li>TCIOFLUSH：冲洗两者</li>
+</ul>
+<p><code>tcsendbreak</code>函数会在指定的时间内持续发送0值的位流。如果<code>duration</code>参数为0，则持续0.25~0.5秒，否则持续时间根据实现的不同而不同。</p>
+<h2 id="终端标识"><a href="#终端标识" class="headerlink" title="终端标识"></a>终端标识</h2><p>参考代码：<a target="_blank" rel="noopener" href="https://gitee.com/maxiaowei/Linux/blob/master/apue/ch18/term_ctermid.c">https://gitee.com/maxiaowei/Linux/blob/master/apue/ch18/term_ctermid.c</a></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="comment">// Returns: pointer to name of controlling terminal on success, </span></span><br><span class="line"><span class="comment">//   pointer to empty string on error</span></span><br><span class="line"><span class="function"><span class="keyword">char</span> *<span class="title">ctermid</span><span class="params">(<span class="keyword">char</span> *ptr)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<p>该函数用于确定终端的名字（一般都是/dev/tty）。</p>
+<p>当<code>ptr</code>非空时，控制终端名会存放在该参数指向的数组中，数组的长度至少为<code>L_ctermid</code>字节。无论<code>ptr</code>是否为空，函数成功执行后都会返回指向终端名的指针（如果<code>ptr</code>为空，则函数自己分配空间）。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="comment">// Returns: 1 (true) if terminal device, 0 (false) otherwise</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">isatty</span><span class="params">(<span class="keyword">int</span> fd)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Returns: pointer to pathname of terminal, NULL on error</span></span><br><span class="line"><span class="function"><span class="keyword">char</span> *<span class="title">ttyname</span><span class="params">(<span class="keyword">int</span> fd)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<p><code>isatty</code>用于检查描述符是否引用的是终端设备。</p>
+<p><code>ttyname</code>返回的是描述符打开的终端设备的路径名。</p>
+<h2 id="窗口大小"><a href="#窗口大小" class="headerlink" title="窗口大小"></a>窗口大小</h2><p>参考代码：<a target="_blank" rel="noopener" href="https://gitee.com/maxiaowei/Linux/blob/master/apue/ch18/term_windowSize.c">https://gitee.com/maxiaowei/Linux/blob/master/apue/ch18/term_windowSize.c</a></p>
+<p>内核为每个终端和伪终端都维护一个<code>winsize</code>结构，包含终端窗口的大小信息。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">winsize</span> &#123;</span></span><br><span class="line">  <span class="keyword">unsigned</span> <span class="keyword">short</span> ws_row;    <span class="comment">/* rows, in characters */</span></span><br><span class="line">  <span class="keyword">unsigned</span> <span class="keyword">short</span> ws_col;    <span class="comment">/* columns, in characters */</span></span><br><span class="line">  <span class="keyword">unsigned</span> <span class="keyword">short</span> ws_xpixel; <span class="comment">/* horizontal size, pixels (unused) */</span></span><br><span class="line">  <span class="keyword">unsigned</span> <span class="keyword">short</span> ws_ypixel; <span class="comment">/* vertical size, pixels (unused) */</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>通过ioctl的<code>TIOCGWINSZ</code>和<code>TIOCSWINSZ</code>命令，可以分别获取和设置该值。</p>
+<p>当窗口大小改变时，前台进程组会收到<code>SIGWINCH</code>信号。</p>
+<h1 id="两种模式"><a href="#两种模式" class="headerlink" title="两种模式"></a>两种模式</h1><h2 id="规范模式"><a href="#规范模式" class="headerlink" title="规范模式"></a>规范模式</h2><p>这种模式比较简单，也是比较常用的模式。工作过程为：发送读请求，输入一行后，终端驱动程序返回。</p>
+<p>该模式中，<code>NL</code>、<code>EOL</code>、<code>EOL2</code>和<code>EOF</code>被解释为行结束。另外，如果设置了终端标志<code>ICRNL</code>且未设置<code>IGNCR</code>，则<code>CR</code>会被转化为<code>NL</code>，从而造成读返回。</p>
+<p>除此以外，还有一些情况会造成读返回：</p>
+<ul>
+<li>读取到请求的字节数，则即使没有读取完整的一行，也会马上返回。下次读取会从前一次停止的地方继续读。</li>
+<li>捕捉到信号，且函数不再自动重启（自动重启的详细介绍参考书10.5节）。</li>
+</ul>
+<h2 id="非规范模式"><a href="#非规范模式" class="headerlink" title="非规范模式"></a>非规范模式</h2><p>参考代码：<a target="_blank" rel="noopener" href="https://gitee.com/maxiaowei/Linux/blob/master/apue/ch18/term_noncanonicalMode.c">https://gitee.com/maxiaowei/Linux/blob/master/apue/ch18/term_noncanonicalMode.c</a></p>
+<p>通过关闭<code>c_lflag</code>字段的<code>ICANON</code>标志，可以使终端运行于非规范模式下。在该模式下，输入数据不装配成行，也不处理以下几个特殊字符：<code>RASE</code>，<code>KILL</code>，<code>EOF</code>，<code>NL</code>， <code>EOL</code>， <code>EOL2</code>， <code>CR</code>， <code>REPRINT</code>，<code>STATUS</code>和 <code>WERASE</code>。</p>
+<p>由于不是以行为单位返回数据，因此需要指定一些参数来告诉系统何时返回数据。除了读取指定量的数据自动返回以外，通过设置c_cc数组中的<code>MIN</code>和<code>TIME</code>变量（下标分别为VMIN和VTIME），使得系统在超过给定时间后也会返回。</p>
+<p><code>MIN</code>用于指定read返回前的最小字节数，<code>TIME</code>指定等待数据到达的<strong>分秒</strong>数（分秒为0.1秒）。两者组合有如下4中情形：</p>
+<ul>
+<li>MIN&gt;0,TIME&gt;0：在第一个字节被接收时启动时长为TIME的定时器。若在超时前接收到了MIN个字节，则read返回MIN个字节，否则返回已接收到的字节数。如果在调用read之前已经有数据可用，那么调用read后返回的字节数就可能会&gt;MIN。</li>
+<li>MIN&gt;0,TIME==0：read在接收到MIN个字节前不会返回。</li>
+<li>MIN==0,TIME&gt;0：调用read后立即启动定时器（注意与第一种情况的启动时机不同），在接到一个字节或定时器超时后，立即返回。因此read可能返回0（定时器超时）。</li>
+<li>MIN==0,TIME==0：有数据可用则返回要求的字节数，否则立即返回0。</li>
+</ul>
+<p><img src="https://hexoa.oss-cn-shanghai.aliyuncs.com/img/20210104112334.png" alt="Four cases for noncanonical input"></p>
+<p>4种情形总结如上表所示，<code>nbytes</code>为read的第三个参数，即要求读取的字节数。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/apue/" rel="tag"># apue</a>
+              <a href="/tags/Terminal/" rel="tag"># Terminal</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/posts/2640012016.html" rel="prev" title="UNIX环境高级编程（15-进程间通信）">
+      <i class="fa fa-chevron-left"></i> UNIX环境高级编程（15-进程间通信）
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/posts/1083767513.html" rel="next" title="UNIX环境高级编程（19-伪终端）">
+      UNIX环境高级编程（19-伪终端） <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    <div class="comments" id="valine-comments"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%A6%82%E5%BF%B5"><span class="nav-number">1.</span> <span class="nav-text">概念</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B7%A5%E4%BD%9C%E6%A8%A1%E5%BC%8F"><span class="nav-number">1.1.</span> <span class="nav-text">工作模式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BB%88%E7%AB%AF%E7%89%B9%E6%80%A7"><span class="nav-number">1.2.</span> <span class="nav-text">终端特性</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%85%8D%E7%BD%AE%E7%BB%88%E7%AB%AF"><span class="nav-number">2.</span> <span class="nav-text">配置终端</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%8E%B7%E5%BE%97%E5%92%8C%E8%AE%BE%E7%BD%AE%E7%BB%88%E7%AB%AF%E5%B1%9E%E6%80%A7"><span class="nav-number">2.1.</span> <span class="nav-text">获得和设置终端属性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%89%B9%E6%AE%8A%E8%BE%93%E5%85%A5%E5%AD%97%E7%AC%A6"><span class="nav-number">2.2.</span> <span class="nav-text">特殊输入字符</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B3%A2%E7%89%B9%E7%8E%87%E5%87%BD%E6%95%B0"><span class="nav-number">2.3.</span> <span class="nav-text">波特率函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A1%8C%E6%8E%A7%E5%88%B6%E5%87%BD%E6%95%B0"><span class="nav-number">2.4.</span> <span class="nav-text">行控制函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BB%88%E7%AB%AF%E6%A0%87%E8%AF%86"><span class="nav-number">2.5.</span> <span class="nav-text">终端标识</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AA%97%E5%8F%A3%E5%A4%A7%E5%B0%8F"><span class="nav-number">2.6.</span> <span class="nav-text">窗口大小</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%A4%E7%A7%8D%E6%A8%A1%E5%BC%8F"><span class="nav-number">3.</span> <span class="nav-text">两种模式</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A7%84%E8%8C%83%E6%A8%A1%E5%BC%8F"><span class="nav-number">3.1.</span> <span class="nav-text">规范模式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%9D%9E%E8%A7%84%E8%8C%83%E6%A8%A1%E5%BC%8F"><span class="nav-number">3.2.</span> <span class="nav-text">非规范模式</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Ma Xiaowei</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">14</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+  <div class="beian"><a href="https://beian.miit.gov.cn/" rel="noopener" target="_blank">苏ICP备20016085号-3 </a>
+  </div>
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Ma Xiaowei</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="//cdn.jsdelivr.net/npm/algoliasearch@4/dist/algoliasearch-lite.umd.js"></script>
+<script src="//cdn.jsdelivr.net/npm/instantsearch.js@4/dist/instantsearch.production.min.js"></script>
+<script src="/js/algolia-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+
+<script>
+NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
+  NexT.utils.getScript('//unpkg.com/valine/dist/Valine.min.js', () => {
+    var GUEST = ['nick', 'mail', 'link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item => {
+      return GUEST.includes(item);
+    });
+    new Valine({
+      el         : '#valine-comments',
+      verify     : false,
+      notify     : false,
+      appId      : 'OsM8HgKBpMKcX0iQ9MQ4G3mJ-MdYXbMMI',
+      appKey     : 'fYmodh51BwF6UcglMHXP1ICM',
+      placeholder: "Just go go",
+      avatar     : 'mm',
+      meta       : guest,
+      pageSize   : '10' || 10,
+      visitor    : false,
+      lang       : '' || 'zh-cn',
+      path       : location.pathname,
+      recordIP   : false,
+      serverURLs : ''
+    });
+  }, window.Valine);
+});
+</script>
+
+</body>
+</html>

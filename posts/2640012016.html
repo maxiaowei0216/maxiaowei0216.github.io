@@ -1,0 +1,762 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"www.maxiaowei.tech","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"valine","storage":true,"lazyload":false,"nav":null,"activeClass":"valine"},"algolia":{"appID":"T7TLZU5A5Q","apiKey":"9bc09b3c19296d4e5e7fc532e4fb0280","indexName":"hexo_next","hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="本章主要介绍一些进程间通信的方式，如管道、消息队列、信号量和共享存储等。 管道一般来说，管道是半双工的（即数据只能在一个方向上流动），并且只能在具有公共祖先的两个进程之间使用。通常，父进程创建管道后会接着调用fork，从而利用管道在父子进程之间通信。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="UNIX环境高级编程（15-进程间通信）">
+<meta property="og:url" content="https://www.maxiaowei.tech/posts/2640012016.html">
+<meta property="og:site_name" content="Xiaowei&#39;s Blog">
+<meta property="og:description" content="本章主要介绍一些进程间通信的方式，如管道、消息队列、信号量和共享存储等。 管道一般来说，管道是半双工的（即数据只能在一个方向上流动），并且只能在具有公共祖先的两个进程之间使用。通常，父进程创建管道后会接着调用fork，从而利用管道在父子进程之间通信。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://hexoa.oss-cn-shanghai.aliyuncs.com/img/20201221194934.png">
+<meta property="og:image" content="https://hexoa.oss-cn-shanghai.aliyuncs.com/img/20201221195626.png">
+<meta property="og:image" content="https://hexoa.oss-cn-shanghai.aliyuncs.com/img/20201221202649.png">
+<meta property="og:image" content="https://hexoa.oss-cn-shanghai.aliyuncs.com/img/20201222102807.png">
+<meta property="og:image" content="https://hexoa.oss-cn-shanghai.aliyuncs.com/img/20201222152247.png">
+<meta property="og:image" content="https://hexoa.oss-cn-shanghai.aliyuncs.com/img/20201222162533.png">
+<meta property="og:image" content="https://hexoa.oss-cn-shanghai.aliyuncs.com/img/20201223113426.png">
+<meta property="article:published_time" content="2020-12-21T09:29:05.000Z">
+<meta property="article:modified_time" content="2021-08-14T11:08:27.440Z">
+<meta property="article:author" content="Ma Xiaowei">
+<meta property="article:tag" content="apue">
+<meta property="article:tag" content="IPC">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://hexoa.oss-cn-shanghai.aliyuncs.com/img/20201221194934.png">
+
+<link rel="canonical" href="https://www.maxiaowei.tech/posts/2640012016.html">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>UNIX环境高级编程（15-进程间通信） | Xiaowei's Blog</title>
+  
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?75c77a06128d0e6c104a661fbbe692bf";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Xiaowei's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container"></div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="algolia-results">
+  <div id="algolia-stats"></div>
+  <div id="algolia-hits"></div>
+  <div id="algolia-pagination" class="algolia-pagination"></div>
+</div>
+
+      
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://www.maxiaowei.tech/posts/2640012016.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Ma Xiaowei">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Xiaowei's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          UNIX环境高级编程（15-进程间通信）
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-12-21 17:29:05" itemprop="dateCreated datePublished" datetime="2020-12-21T17:29:05+08:00">2020-12-21</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-08-14 19:08:27" itemprop="dateModified" datetime="2021-08-14T19:08:27+08:00">2021-08-14</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Linux/" itemprop="url" rel="index"><span itemprop="name">Linux</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/posts/2640012016.html#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/posts/2640012016.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>9.2k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>8 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>本章主要介绍一些进程间通信的方式，如管道、消息队列、信号量和共享存储等。</p>
+<h1 id="管道"><a href="#管道" class="headerlink" title="管道"></a>管道</h1><p>一般来说，管道是半双工的（即数据只能在一个方向上流动），并且只能在具有公共祖先的两个进程之间使用。通常，父进程创建管道后会接着调用<code>fork</code>，从而利用管道在父子进程之间通信。</p>
+<span id="more"></span>
+
+<p><img src="https://hexoa.oss-cn-shanghai.aliyuncs.com/img/20201221194934.png" alt="Half-duplex pipe after a fork"></p>
+<p>之后，父子进程可以分别关闭管道的读/写端，以利用管道在父子进程中传递信息。例如，如果想要创建从父进程到子进程的管道，则可以关闭父进程的<strong>读端</strong>和子进程的<strong>写端</strong>。</p>
+<p>由于管道半双工的特性，想要在父子进程间双向传递信息需要建立2个管道。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="comment">// Returns: 0 if OK, −1 on error</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">pipe</span><span class="params">(<span class="keyword">int</span> fd[<span class="number">2</span>])</span></span>;</span><br></pre></td></tr></table></figure>
+
+<p>利用<code>pipe</code>函数可以创建管道，<code>fd</code>参数返回两个文件描述符，<code>fd[0]</code>为读而打开，<code>fd[1]</code>为写而打开。<code>fd[1]</code>的输出是<code>fd[0]</code>的输入。</p>
+<p>在上面的例子中，父进程关闭<code>fd[0]</code>，子进程关闭<code>fd[1]</code>，那么最后的示意图如下：</p>
+<p><img src="https://hexoa.oss-cn-shanghai.aliyuncs.com/img/20201221195626.png" alt="Pipe from parent to child"></p>
+<p><strong>注意：</strong></p>
+<ul>
+<li>当读一个写端被关闭的管道，在所有数据被读取后，read返回0</li>
+<li>当写一个读端被关闭的管道，会产生<code>SIGPIPE</code>信号。如果忽略该信号或从信号处理程序返回，则write返回-1，且设置errno为<code>EPIPE</code></li>
+<li>写入不超过<code>PIPE_ BUF</code> 字节的操作是原子的，如果写入数据的大小超过该值，在多个进程同时写一个管道时，所写的数据可能交叉</li>
+</ul>
+<h2 id="连接到另一个进程"><a href="#连接到另一个进程" class="headerlink" title="连接到另一个进程"></a>连接到另一个进程</h2><p>管道的通常用法是创建一个连接到另一个进程的管道，然后读取其输出或者向其输入端发送数据。可以使用<code>popen</code>和<code>pclose</code>实现这一功能。这两个函数实现的操作是：创建一个管道，fork一个子进程，关闭未使用的管道，执行shell运行命令，然后等待命令终止。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="comment">// Returns: file pointer if OK, NULL on error</span></span><br><span class="line"><span class="function">FILE *<span class="title">popen</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *cmdstring, <span class="keyword">const</span> <span class="keyword">char</span> *type)</span></span>;</span><br><span class="line"><span class="comment">// Returns: termination status of cmdstring, or −1 on error</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">pclose</span><span class="params">(FILE *fp)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<p><code>popen</code>先执行fork，然后调用exec执行<code>cmdstring</code>，并且返回一个标准I/O文件指针，如果<code>type</code>是”r”，则文件指针连接到<code>cmdstring</code>的标准输出，如果是”w”则连接到标准输入，如下图所示：</p>
+<p><img src="https://hexoa.oss-cn-shanghai.aliyuncs.com/img/20201221202649.png" alt="popen"></p>
+<p><code>cmdstring</code>会以<code>sh -c cmdstring</code>的方式执行。</p>
+<p><code>pclose</code>函数关闭标准I/O流，等待命令终止，然后返回shell的终止状态。（注意不要使用fclose函数，它不会等待子进程结束）</p>
+<h2 id="协同进程"><a href="#协同进程" class="headerlink" title="协同进程"></a>协同进程</h2><blockquote>
+<p>UNIX系统过滤程序从标准输入读取数据，向标准输出写数据。几个过滤程序通常在shell管道中线性连接。当一个过滤程序既产生某个过滤程序的输入，又读取该过滤程序的输出时，它就变成了协同进程（coprocess）。</p>
+</blockquote>
+<p>要实现协同进程，需要创建两个管道，分别作为协同进程的标准输入和输出，示意图如下：</p>
+<p><img src="https://hexoa.oss-cn-shanghai.aliyuncs.com/img/20201222102807.png" alt="Driving a coprocess by writing its standard input and reading its standard output"></p>
+<p>子进程的参考代码如下：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">close(fd1[<span class="number">1</span>]);</span><br><span class="line">close(fd2[<span class="number">0</span>]);</span><br><span class="line"><span class="keyword">if</span> (fd1[<span class="number">0</span>] != STDIN_FILENO) &#123;</span><br><span class="line">    <span class="keyword">if</span> (dup2(fd1[<span class="number">0</span>], STDIN_FILENO) != STDIN_FILENO)</span><br><span class="line">        err_sys(<span class="string">&quot;dup2 error to stdin&quot;</span>);</span><br><span class="line">    close(fd1[<span class="number">0</span>]);</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">if</span> (fd2[<span class="number">1</span>] != STDOUT_FILENO) &#123;</span><br><span class="line">    <span class="keyword">if</span> (dup2(fd2[<span class="number">1</span>], STDOUT_FILENO) != STDOUT_FILENO)</span><br><span class="line">        err_sys(<span class="string">&quot;dup2 error to stdout&quot;</span>);</span><br><span class="line">    close(fd2[<span class="number">1</span>]);</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">if</span> (execl(<span class="string">&quot;./add2&quot;</span>, <span class="string">&quot;add2&quot;</span>, (<span class="keyword">char</span> *)<span class="number">0</span>) &lt; <span class="number">0</span>)</span><br><span class="line">    err_sys(<span class="string">&quot;execl error&quot;</span>);</span><br></pre></td></tr></table></figure>
+
+<p><code>dup2</code>函数用于复制指定的文件描述符，它将两个管道描述符分别连接到标准输入和输出。</p>
+<p><strong>注意：</strong></p>
+<p>在协同进程中如果需要使用标准I/O（如fgets），则要额外注意其缓冲机制。对于管道，其默认是<strong>全缓冲</strong>的，可以通过调用<code>fflush</code>或者设置缓冲模式（setvbuf/setbuf）来解决。</p>
+<h2 id="FIFO"><a href="#FIFO" class="headerlink" title="FIFO"></a>FIFO</h2><p>FIFO也被称为命名管道，它使得不相关的进程间也能交换数据。</p>
+<p>FIFO也是一种文件类型，创建FIFO与创建文件类似，需要指定其路径。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/stat.h&gt;</span></span></span><br><span class="line"><span class="comment">// Both return: 0 if OK, −1 on error</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">mkfifo</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *path, <span class="keyword">mode_t</span> mode)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">mkfifoat</span><span class="params">(<span class="keyword">int</span> dirfd, <span class="keyword">const</span> <span class="keyword">char</span> *path, <span class="keyword">mode_t</span> mode)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<p><code>mode</code>参数指明FIFO的文件权限，与open函数中的mode相同。</p>
+<p><code>mkfifoat</code>函数的<code>path</code>参数有如下几种情况：</p>
+<ul>
+<li>如果指定为绝对路径，则会忽略<code>dirfd</code>参数，行为与<code>mkfifo</code>类似</li>
+<li>如果指定为相对路径，则该路径与<code>dirfd</code>打开的目录有关</li>
+<li>如果指定为相对路径，且<code>dirfd</code>有参数<strong>AT_FDCWD</strong>，那么路径以当前目录开始</li>
+</ul>
+<p>创建完成后，就可以使用open打开FIFO。</p>
+<p>在打开时如果没有设置非阻塞标志<strong>O_NONBLOCK</strong>，那么如果以只读方式打开（O_RDONLY），进程会被阻塞直到其他进程为写而打开这个FIFO，同理，只写方式（O_ WRONL ）打开也会阻塞。</p>
+<p>但是，不应该使用O_RDWR的方式来绕过这种阻塞行为，而应该使用非阻塞标志。使用读写方式打开FIFO，会导致读取数据时永远看不到文件结束，因为至少会有一个写描述符是打开着的。</p>
+<h3 id="实例"><a href="#实例" class="headerlink" title="实例"></a>实例</h3><p>可以使用FIFO进行客户进程与服务器进程之间的通信。每个客户进程可以将自己的请求写到一个公共的FIFO文件中（请求长度需要小于PIPE_BUF以避免客户进程之间的数据交叉），服务器进程针对每个客户进程创建FIFO，用于向客户进程发送数据。客户进程的FIFO的路径名可以使用客户进程的PID号作为基础，如/tmp/servv1.PID，这样客户进程就直到该从哪个FIFO读取服务器进程返回的数据了。</p>
+<p><img src="https://hexoa.oss-cn-shanghai.aliyuncs.com/img/20201222152247.png" alt="Client–server communication using FIFOs"></p>
+<h1 id="XSI-IPC"><a href="#XSI-IPC" class="headerlink" title="XSI IPC"></a>XSI IPC</h1><p>这一部分主要包含3种IPC方式：消息队列、信号量和共享存储器。</p>
+<p>每个IPC对象与键（key）相关联，以使得多个进程可以通过它进行联系。在创建IPC结构时，必须指定一个键。而在系统内部，则使用标识符引用IPC结构。</p>
+<p>关于键的创建方式，主要有如下几种：</p>
+<ul>
+<li><p>指定为<strong>IPC_PRIVATE</strong>，这会创建一个新的IPC结构，可以将返回的标识符存入文件供其他进程使用，也可直接给fork后的子进程使用</p>
+</li>
+<li><p>在公共头文件中定义一个键，然后由一个进程（通常是服务器进程）根据这个键来创建新的IPC结构。但是这种方式可能会与已经存在的键冲突，需要进程删除原有的IPC结构再重新创建。</p>
+</li>
+<li><p>使用<code>ftok</code>函数，将路径名和某个数字（0-255）变换为一个键。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/ipc.h&gt;</span></span></span><br><span class="line"><span class="comment">// Returns: key if OK, (key_t)−1 on error</span></span><br><span class="line"><span class="function"><span class="keyword">key_t</span> <span class="title">ftok</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *path, <span class="keyword">int</span> id)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<p><code>path</code>参数必须引用的是现有的文件，<code>id</code>参数只使用其低8位。</p>
+</li>
+</ul>
+<p>另外，在创建IPC结构时还需要指定其权限，与文件权限类似，但是不存在执行权限。</p>
+<p><img src="https://hexoa.oss-cn-shanghai.aliyuncs.com/img/20201222162533.png" alt="XSI IPC permissions"></p>
+<p><strong>注意：</strong></p>
+<ul>
+<li><code>IPC_PRIVATE</code>只能用于创建新的IPC结构，而不能用来引用一个现有的IPC结构。</li>
+<li>如果希望确保新创建的IPC结构没有引用具有同一标识符的现有IPC结构，则可以在flag中同时指定<code>IPC_CREAT</code>和<code>IPC_EXCL</code>。这样，如果已经存在则会返回EEXIST。</li>
+</ul>
+<h2 id="消息队列"><a href="#消息队列" class="headerlink" title="消息队列"></a>消息队列</h2><p>消息队列是消息的链接表，存储在内核中，由消息队列标识符标识。以下简称队列。</p>
+<p>相关的数据结构很少用到，再次不再列出，后面的信号量和共享存储同理。需要的话可以到对应的头文件中查看。</p>
+<p>示例代码参考<a target="_blank" rel="noopener" href="https://gitee.com/maxiaowei/Linux/blob/master/apue/ch15/ipc_msg.c">https://gitee.com/maxiaowei/Linux/blob/master/apue/ch15/ipc_msg.c</a></p>
+<p><code>msgget</code>用于创建或打开一个队列。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/msg.h&gt;</span></span></span><br><span class="line"><span class="comment">// Returns: message queue ID if OK, −1 on error</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">msgget</span><span class="params">(<span class="keyword">key_t</span> key, <span class="keyword">int</span> flag)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<p><code>key</code>参数可以是通过ftok函数生成的，也可以是IPC_PRIVATE。<code>flag</code>用于设定读写权限，如果是新建该IPC结构则可以添加<code>IPC_CREAT</code>。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Returns: 0 if OK, −1 on error</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">msgsnd</span><span class="params">(<span class="keyword">int</span> msqid, <span class="keyword">const</span> <span class="keyword">void</span> *ptr, <span class="keyword">size_t</span> nbytes, <span class="keyword">int</span> flag)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<p><code>msgsnd</code>将新消息添加到队列尾端。</p>
+<p><code>msqid</code>是get函数返回的队列ID，<code>nbytes</code>是消息数据的长度。</p>
+<p><code>ptr</code>指向一个结构，其包含一个正的消息类型，和消息数据（<code>nbytes</code>为0则无消息数据），可以定义其结构如下：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">msgbuf</span> &#123;</span></span><br><span class="line">    <span class="keyword">long</span> mtype;       <span class="comment">/* message type, must be &gt; 0 */</span></span><br><span class="line">    <span class="keyword">char</span> mtext[<span class="number">1</span>];    <span class="comment">/* message data, of length nbytes */</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p><code>flag</code>可以指定为<code>IPC_NOWAIT</code>，当消息队列满时（或达到系统限制），会立即出错返回EAGAIN。否则，进程会一直阻塞直到：有空间容纳消息；队列被删除（返回EIDRM)；或捕捉到信号并从处理程序返回（返回EINTR）。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Returns: size of data portion of message if OK, −1 on error</span></span><br><span class="line"><span class="function"><span class="keyword">ssize_t</span> <span class="title">msgrcv</span><span class="params">(<span class="keyword">int</span> msqid, <span class="keyword">void</span> *ptr, <span class="keyword">size_t</span> nbytes, <span class="keyword">long</span> type, <span class="keyword">int</span> flag)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<p><code>msgrcv</code>用于从队列中取出消息，可以指定获取某些类型的数据，而不是必须按照先进先出的次序。</p>
+<p><code>ptr</code>指向的结构与snd函数一样，而<code>nbytes</code>则指定了消息长度，如果返回的消息长度&gt;nbytes，而<code>flag</code>中设置了MSG_NOERROR，则消息被截断。如果没有设置则出错返回E2BIG，而消息仍然留在队列中。</p>
+<p><code>type</code>可以指定想要获取的消息：</p>
+<ul>
+<li>type==0：返回队列中的第一个消息</li>
+<li>type&gt;0：返回消息类型为type的第一个消息</li>
+<li>type&lt;0：返回消息类型≤type绝对值的消息，如果有若干个满足则取类型最小的。</li>
+</ul>
+<p><code>flag</code>参数同样可以指定为非阻塞。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Returns: 0 if OK, −1 on error</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">msgctl</span><span class="params">(<span class="keyword">int</span> msqid, <span class="keyword">int</span> cmd, struct msqid_ds *buf )</span></span>;</span><br></pre></td></tr></table></figure>
+
+<p><code>msgctl</code>函数对队列执行多种操作。</p>
+<p><code>cmd</code>参数指定队列需要执行的操作：</p>
+<ul>
+<li>IPC_STAT：获取队列的msqid_ds结构信息，存放于buf指向的结构中</li>
+<li>IPC_SET：将msg_perm.uid，msg_perm.gid，msg_perm.mode和msg_qbytes通过buf复制到队列的msqid_ds结构中。该命令只能由超级用户或者有效用户ID等于msg_perm.cuid或msg_perm.uid的用户执行。</li>
+<li>IPC_RMID：删除队列及其中的数据。也只能由上述的两类用户执行。</li>
+</ul>
+<p>这3条命令也适用与信号量（semctl）和共享存储（shmctl）。</p>
+<h2 id="信号量"><a href="#信号量" class="headerlink" title="信号量"></a>信号量</h2><p>信号量是一个计数器，用于为多个进程提供对共享数据对象的访问。</p>
+<p>示例代码：<a target="_blank" rel="noopener" href="https://gitee.com/maxiaowei/Linux/blob/master/apue/ch15/ipc_sem.c">https://gitee.com/maxiaowei/Linux/blob/master/apue/ch15/ipc_sem.c</a></p>
+<p>XSI信号量需要定义为一个或多个信号量的合集，因此在创建的时候需要指明信号量的个数，在使用的时候也要指明用的是哪个信号量。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/sem.h&gt;</span></span></span><br><span class="line"><span class="comment">// Returns: semaphore ID if OK, −1 on error// </span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">semget</span><span class="params">(<span class="keyword">key_t</span> key, <span class="keyword">int</span> nsems, <span class="keyword">int</span> flag)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<p><code>semget</code>用于创建或打开一个信号量合集。相关参数的与上一节的队列相似，多出来的<code>nsems</code>用于指定该集合中的信号量数。如果是创建新集合，则需要指定数量；如果是引用现有的集合，则将其设置为0。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">semctl</span><span class="params">(<span class="keyword">int</span> semid, <span class="keyword">int</span> semnum, <span class="keyword">int</span> cmd, ... <span class="comment">/* union semun arg */</span> )</span></span>;</span><br></pre></td></tr></table></figure>
+
+<p><code>semctl</code>包含多种信号量操作。</p>
+<p>第4个参数<code>arg</code>由<code>cmd</code>的实际值来决定是否使用，注意该参数并不是指针。如果需要使用该参数，其类型需要自己定义，一般定义为如下形式：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">union</span> <span class="title">semun</span> &#123;</span></span><br><span class="line">    <span class="keyword">int</span>              val;   <span class="comment">/* for SETVAL */</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">semid_ds</span> *<span class="title">buf</span>;</span>   <span class="comment">/* for IPC_STAT and IPC_SET */</span></span><br><span class="line">    <span class="keyword">unsigned</span> <span class="keyword">short</span>  *<span class="built_in">array</span>; <span class="comment">/* for GETALL and SETALL */</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>参数<code>semnum</code>用于指定信号量集合中的某个成员，该值在0 ~ nsmes-1之间。</p>
+<p><code>cmd</code>由如下10个可选项：</p>
+<ul>
+<li>IPC_STAT，IPC_SET，IPC_RMID：与队列类似</li>
+<li>GETVAL，SETVAL：返回/设置（通过arg.val）<code>semnum</code>指定的成员的信号量值（semval）</li>
+<li>GETPID，GETNCNT，GETZCNT：返回指定成员的sempid，semncnt，semzcnt</li>
+<li>GETALL，SETALL：取/设置所有的信号量值（通过arg.array）</li>
+</ul>
+<p>除GETALL以外所有的GET命令都由函数的返回值返回，其他命令则是成功返回0，失败返回-1并设置errno。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Returns: 0 if OK, −1 on error</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">semop</span><span class="params">(<span class="keyword">int</span> semid, struct sembuf semoparray[], <span class="keyword">size_t</span> nops)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<p><code>semop</code>函数自动执行信号量集合上的操作数组。</p>
+<p><code>nops</code>是数组<code>semoparray</code>的元素个数。</p>
+<p><code>semoparray</code>是一个信号量操作数组，其中存放每个信号量的操作，其结构如下：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">sembuf</span> &#123;</span></span><br><span class="line">  <span class="keyword">unsigned</span> <span class="keyword">short</span> sem_num; <span class="comment">/* member # in set (0, 1, ..., nsems-1) */</span></span><br><span class="line">  <span class="keyword">short</span>          sem_op;  <span class="comment">/* operation (negative, 0, or positive) */</span></span><br><span class="line">  <span class="keyword">short</span>          sem_flg; <span class="comment">/* IPC_NOWAIT, SEM_UNDO */</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p><code>sem_flg</code>的SEM_UNDO标志标识当进程终止时，该操作修改的信号量值会被恢复，即重新设置为调用该操作之前的数值。</p>
+<p><code>sem_op</code>可以指定如下3种值：</p>
+<ul>
+<li>正值，表示进程释放的占用的资源数，<code>sem_op</code>值会加到对应的信号量的值上。</li>
+<li>0，表示进程希望等待该信号量值变为0。IPC_NOWAIT标志可以控制进程是否阻塞，相关的出错返回信息可以查阅手册，此处省略。</li>
+<li>负值，表示进程想要获取的资源数。如果信号量值≥<code>sem_op</code>的绝对值（满足需求），则会从当前的信号量值上减去对应的值，否则由IPC_NOWAIT标志决定进程是否阻塞。</li>
+</ul>
+<p><code>semop</code>函数具有原子性，即要么执行数组中所有的操作，要么什么也不做。</p>
+<h2 id="共享存储"><a href="#共享存储" class="headerlink" title="共享存储"></a>共享存储</h2><p>共享存储允许两个或多个进程共享一个给定的存储区。但是，需要注意存储区访问的同步问题，当进程在写入数据时其他进程不应该去读取这些数据。一般使用信号量来解决这一同步问题。</p>
+<p>相比与通过文件映射的方式来共享存储区的方式，XSI共享存储没有相关的文件，它共享的是内存的匿名段。</p>
+<p>示例代码：<a target="_blank" rel="noopener" href="https://gitee.com/maxiaowei/Linux/blob/master/apue/ch15/ipc_shm.c">https://gitee.com/maxiaowei/Linux/blob/master/apue/ch15/ipc_shm.c</a></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/shm.h&gt;</span></span></span><br><span class="line"><span class="comment">// Returns: shared memory ID if OK, −1 on error</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">shmget</span><span class="params">(<span class="keyword">key_t</span> key, <span class="keyword">size_t</span> size, <span class="keyword">int</span> flag)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<p><code>shmget</code>函数用于创建或引用一个共享存储段，在创建时<code>size</code>指定段的大小（单位是字节），若要引用一个现存的段，则应该设置为0。实现一般将大小向上取整为系统页长的整数倍，若指定的<code>size</code>不是整数倍，则余下的空间是不可使用的。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Returns: 0 if OK, −1 on error</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">shmctl</span><span class="params">(<span class="keyword">int</span> shmid, <span class="keyword">int</span> cmd, struct shmid_ds *buf )</span></span>;</span><br></pre></td></tr></table></figure>
+
+<p><code>shmctl</code>函数对共享存储段执行多种操作。主要有IPC_STAT，IPC_SET和IPC_RMID，相关解释可以参考消息队列部分。</p>
+<p>另外，Linux中还额外提供额外的命令支持，可以参考手册shmctl(2) 。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Returns: pointer to shared memory segment if OK, −1 on error</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> *<span class="title">shmat</span><span class="params">(<span class="keyword">int</span> shmid, <span class="keyword">const</span> <span class="keyword">void</span> *addr, <span class="keyword">int</span> flag)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<p><code>shmat</code>用于将共享存储段连接到进程的地址空间。具体连接到地址空间的什么位置由2、3两个参数决定。</p>
+<ul>
+<li>addr=0，则连接到内核选择的第一个可用地址上。（推荐）</li>
+<li>addr≠0，且<code>flag</code>没有指定SHM_RND，那么连接到<code>addr</code>指定的地址。</li>
+<li>addr≠0，且指定了SHM_RND，那么系统会按照公式(addr-(addr % SHMLBA))决定连接地址。该公式作用是将地址向下取最近的SHMLBA的倍数，而常数SHMLBA表示“低边界地址倍数”。</li>
+</ul>
+<p><code>flag</code>还可以指定SHM_RDONLY以只读方式连接共享段。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Returns: 0 if OK, −1 on error</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">shmdt</span><span class="params">(<span class="keyword">const</span> <span class="keyword">void</span> *addr)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<p><code>shmdt</code>用于分离共享存储段。这一操作不会删除系统中共享存储段的标识符及其数据结构。想要删除对应的数据结构，需要调用<code>shmctl</code>的IPC_RMID命令。</p>
+<p><img src="https://hexoa.oss-cn-shanghai.aliyuncs.com/img/20201223113426.png" alt="Memory layout on an Intel-based Linux system"></p>
+<h1 id="POSIX信号量"><a href="#POSIX信号量" class="headerlink" title="POSIX信号量"></a>POSIX信号量</h1><p>POSIX信号量与XSI信号量最大的不同就是没有信号量集的概念，一次只能操作一个信号量。还有就是在删除信号量时，正在使用XSI信号量的操作会失败；而POSIX信号量的操作会正常执行，直到该信号量的最有一个引用被释放。</p>
+<p>POSIX信号量有两种形式：命名的和未命名的。两者的差异在于创建和销毁的形式上，使用的方式是一样的。未命名的信号量只存在于内存中，因此想要使用这些信号量的进程需要有对应的访问权限，如同一进程中的线程，或者是不同进程中映射相同的内存内容到自己的地址空间的线程。而命名信号量可以被任何直到它们名字的进程访问。</p>
+<p>示例代码：<a target="_blank" rel="noopener" href="https://gitee.com/maxiaowei/Linux/blob/master/apue/ch15/ipc_psem.c">https://gitee.com/maxiaowei/Linux/blob/master/apue/ch15/ipc_psem.c</a></p>
+<h2 id="创建与销毁"><a href="#创建与销毁" class="headerlink" title="创建与销毁"></a>创建与销毁</h2><h3 id="命名信号量"><a href="#命名信号量" class="headerlink" title="命名信号量"></a>命名信号量</h3><p>给信号量命名需要遵守一定的规则：</p>
+<ul>
+<li>名字的第一个字符应该是<code>/</code>。因为一般POSIX信号量的实现要使用文件系统。</li>
+<li>名字不应该包含其他斜杠。</li>
+<li>名字长度是实现定义的，不应长于_POSIX_NAME_MAX。</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;semaphore.h&gt;</span></span></span><br><span class="line"><span class="comment">// Returns: Pointer to semaphore if OK, SEM_FAILED on error</span></span><br><span class="line"><span class="function"><span class="keyword">sem_t</span> *<span class="title">sem_open</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *name, <span class="keyword">int</span> oflag, ... <span class="comment">/* mode_t mode,</span></span></span></span><br><span class="line"><span class="comment"><span class="params"><span class="function">              unsigned int value */</span> )</span></span>;</span><br></pre></td></tr></table></figure>
+
+<p><code>sem_open</code>用于创建一个新的信号量或使用一个现有的信号量。</p>
+<p>当想要使用一个现有的信号量时，只需指定其名字，并将<code>oflag</code>设为0。</p>
+<p>当<code>oflag</code>包含O_CREAT标志时，如果信号量不存在则会创建新的，如果存在则会被使用，但不会重新初始化。指定此标志时，还需要提供后面的2个参数。<code>mode</code>指定访问权限，这与打开文件的权限相同；<code>value</code>指定信号量的初值。</p>
+<p>如果<code>oflag</code>同时指定了O_EXCL标志，则在创建信号量时，如果信号量已经存在就会出错。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Both return: 0 if OK, −1 on error</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">sem_close</span><span class="params">(<span class="keyword">sem_t</span> *sem)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">sem_unlink</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *name)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<p><code>sem_close</code>用于关闭一个信号量，释放相关资源。进程退出时如果没有调用该函数，系统也会自动关闭打开的信号量。POSIX信号量没有UNDO机制，所以信号量的值不会受到影响。</p>
+<p><code>sem_unlink</code>用于销毁信号量，删除信号量的名字。如果没有打开的信号量引用，信号量会被立即销毁，否则会延迟到最后一个打开的引用关闭。</p>
+<h3 id="未命名信号量"><a href="#未命名信号量" class="headerlink" title="未命名信号量"></a>未命名信号量</h3><p>这种形式的信号量主要用于单个进程。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Both return: 0 if OK, −1 on error</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">sem_init</span><span class="params">(<span class="keyword">sem_t</span> *sem, <span class="keyword">int</span> pshared, <span class="keyword">unsigned</span> <span class="keyword">int</span> value)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">sem_destroy</span><span class="params">(<span class="keyword">sem_t</span> *sem)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<p><code>sem_init</code>用于创建一个未命名信号量。</p>
+<ul>
+<li><p><code>value</code>指定其初值。</p>
+</li>
+<li><p><code>pshared</code>值为0时，信号量仅在进程的线程之间共享；不为0则表明会在进程之间共享。</p>
+</li>
+</ul>
+<p><code>sem_destroy</code>用于销毁未命名信号量。销毁之后不能使用任何带有sem的信号量函数，除非通过sem_init重新初始化它。</p>
+<h2 id="信号量操作"><a href="#信号量操作" class="headerlink" title="信号量操作"></a>信号量操作</h2><p>与XSI信号量不同，POSIX信号量一次操作只能+1或者-1。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;time.h&gt;</span></span></span><br><span class="line"><span class="comment">// All return: 0 if OK, −1 on error</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">sem_trywait</span><span class="params">(<span class="keyword">sem_t</span> *sem)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">sem_wait</span><span class="params">(<span class="keyword">sem_t</span> *sem)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">sem_timedwait</span><span class="params">(<span class="keyword">sem_t</span> *<span class="keyword">restrict</span> sem,</span></span></span><br><span class="line"><span class="params"><span class="function">                  <span class="keyword">const</span> struct timespec *<span class="keyword">restrict</span> tsptr)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<p>这3个函数实现信号量的-1操作。</p>
+<p>当信号量计数为0时，使用<code>sem_wait</code>函数会阻塞，直到成功使信号量-1或者被信号中断；而<code>sem_trywait</code>会返回-1且设置errno为EAGAIN。</p>
+<p>使用<code>sem_timedwait</code>可以设定等待时间，超时后会返回-1且设置errno为ETIMEOUT。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Returns: 0 if OK, −1 on error</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">sem_post</span><span class="params">(<span class="keyword">sem_t</span> *sem)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<p>调用<code>sem_post</code>会使信号量计数+1。如果有进程被改信号量阻塞，那么进程会被唤醒。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Returns: 0 if OK, −1 on error</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">sem_getvalue</span><span class="params">(<span class="keyword">sem_t</span> *<span class="keyword">restrict</span> sem, <span class="keyword">int</span> *<span class="keyword">restrict</span> valp)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<p><code>sem_getvalue</code>函数用于获取信号量值，该数值存储在<code>valp</code>指向的地址处。注意函数返回的数值有可能是过时的。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/apue/" rel="tag"># apue</a>
+              <a href="/tags/IPC/" rel="tag"># IPC</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/posts/3327551038.html" rel="prev" title="UNIX环境高级编程（14-高级I/O）">
+      <i class="fa fa-chevron-left"></i> UNIX环境高级编程（14-高级I/O）
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/posts/255074044.html" rel="next" title="UNIX环境高级编程（18-终端I/O）">
+      UNIX环境高级编程（18-终端I/O） <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    <div class="comments" id="valine-comments"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%AE%A1%E9%81%93"><span class="nav-number">1.</span> <span class="nav-text">管道</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BF%9E%E6%8E%A5%E5%88%B0%E5%8F%A6%E4%B8%80%E4%B8%AA%E8%BF%9B%E7%A8%8B"><span class="nav-number">1.1.</span> <span class="nav-text">连接到另一个进程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8D%8F%E5%90%8C%E8%BF%9B%E7%A8%8B"><span class="nav-number">1.2.</span> <span class="nav-text">协同进程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#FIFO"><span class="nav-number">1.3.</span> <span class="nav-text">FIFO</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9E%E4%BE%8B"><span class="nav-number">1.3.1.</span> <span class="nav-text">实例</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#XSI-IPC"><span class="nav-number">2.</span> <span class="nav-text">XSI IPC</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97"><span class="nav-number">2.1.</span> <span class="nav-text">消息队列</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BF%A1%E5%8F%B7%E9%87%8F"><span class="nav-number">2.2.</span> <span class="nav-text">信号量</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B1%E4%BA%AB%E5%AD%98%E5%82%A8"><span class="nav-number">2.3.</span> <span class="nav-text">共享存储</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#POSIX%E4%BF%A1%E5%8F%B7%E9%87%8F"><span class="nav-number">3.</span> <span class="nav-text">POSIX信号量</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%9B%E5%BB%BA%E4%B8%8E%E9%94%80%E6%AF%81"><span class="nav-number">3.1.</span> <span class="nav-text">创建与销毁</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%91%BD%E5%90%8D%E4%BF%A1%E5%8F%B7%E9%87%8F"><span class="nav-number">3.1.1.</span> <span class="nav-text">命名信号量</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9C%AA%E5%91%BD%E5%90%8D%E4%BF%A1%E5%8F%B7%E9%87%8F"><span class="nav-number">3.1.2.</span> <span class="nav-text">未命名信号量</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BF%A1%E5%8F%B7%E9%87%8F%E6%93%8D%E4%BD%9C"><span class="nav-number">3.2.</span> <span class="nav-text">信号量操作</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Ma Xiaowei</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">14</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+  <div class="beian"><a href="https://beian.miit.gov.cn/" rel="noopener" target="_blank">苏ICP备20016085号-3 </a>
+  </div>
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Ma Xiaowei</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="//cdn.jsdelivr.net/npm/algoliasearch@4/dist/algoliasearch-lite.umd.js"></script>
+<script src="//cdn.jsdelivr.net/npm/instantsearch.js@4/dist/instantsearch.production.min.js"></script>
+<script src="/js/algolia-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+
+<script>
+NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
+  NexT.utils.getScript('//unpkg.com/valine/dist/Valine.min.js', () => {
+    var GUEST = ['nick', 'mail', 'link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item => {
+      return GUEST.includes(item);
+    });
+    new Valine({
+      el         : '#valine-comments',
+      verify     : false,
+      notify     : false,
+      appId      : 'OsM8HgKBpMKcX0iQ9MQ4G3mJ-MdYXbMMI',
+      appKey     : 'fYmodh51BwF6UcglMHXP1ICM',
+      placeholder: "Just go go",
+      avatar     : 'mm',
+      meta       : guest,
+      pageSize   : '10' || 10,
+      visitor    : false,
+      lang       : '' || 'zh-cn',
+      path       : location.pathname,
+      recordIP   : false,
+      serverURLs : ''
+    });
+  }, window.Valine);
+});
+</script>
+
+</body>
+</html>
