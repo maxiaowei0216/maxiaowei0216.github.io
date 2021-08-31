@@ -20,23 +20,24 @@
     var CONFIG = {"hostname":"www.maxiaowei.tech","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"valine","storage":true,"lazyload":false,"nav":null,"activeClass":"valine"},"algolia":{"appID":"T7TLZU5A5Q","apiKey":"9bc09b3c19296d4e5e7fc532e4fb0280","indexName":"hexo_next","hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="数组与指针在大部分情况下，数组和指针是可以互换的。书中的第4章主要讲解了数组和指针的不同之处，而在第9章则着重讨论两者可以互换的场景。">
+  <meta name="description" content="最近在研究腾讯的自动化部署功能时，发现有篇文档介绍了如何规范代码提交：Git commit message 规范，然而在按照文档进行操作时，却无法正确运行。通过搜索发现，主要是husky已经升级到了7版本，与之前的版本无法兼容。下文记录了该方案的安装过程，备后续部署时参考。 安装commitizencommitizen在提交代码的时候提供了一个交互式的选择界面，方便用户自动生成符合规范的代码提交注">
 <meta property="og:type" content="article">
-<meta property="og:title" content="C专家编程(4)">
-<meta property="og:url" content="https://www.maxiaowei.tech/posts/3268952981.html">
+<meta property="og:title" content="利用commitizen+commitlint+husky规范代码提交注释">
+<meta property="og:url" content="https://www.maxiaowei.tech/posts/3681943647.html">
 <meta property="og:site_name" content="Xiaowei&#39;s Blog">
-<meta property="og:description" content="数组与指针在大部分情况下，数组和指针是可以互换的。书中的第4章主要讲解了数组和指针的不同之处，而在第9章则着重讨论两者可以互换的场景。">
+<meta property="og:description" content="最近在研究腾讯的自动化部署功能时，发现有篇文档介绍了如何规范代码提交：Git commit message 规范，然而在按照文档进行操作时，却无法正确运行。通过搜索发现，主要是husky已经升级到了7版本，与之前的版本无法兼容。下文记录了该方案的安装过程，备后续部署时参考。 安装commitizencommitizen在提交代码的时候提供了一个交互式的选择界面，方便用户自动生成符合规范的代码提交注">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://hexoa.oss-cn-shanghai.aliyuncs.com/img/20201102160829.jpg">
-<meta property="og:image" content="https://hexoa.oss-cn-shanghai.aliyuncs.com/img/20201102160911.jpg">
-<meta property="og:image" content="https://hexoa.oss-cn-shanghai.aliyuncs.com/img/20201102162819.jpg">
-<meta property="article:published_time" content="2020-11-02T07:52:38.000Z">
-<meta property="article:modified_time" content="2021-08-28T08:38:24.180Z">
+<meta property="og:image" content="https://hexoa.oss-cn-shanghai.aliyuncs.com/img/202108311327886.png!def">
+<meta property="og:image" content="https://hexoa.oss-cn-shanghai.aliyuncs.com/img/202108311349809.png!def">
+<meta property="og:image" content="https://hexoa.oss-cn-shanghai.aliyuncs.com/img/202108311428040.png!def">
+<meta property="article:published_time" content="2021-08-31T04:46:36.000Z">
+<meta property="article:modified_time" content="2021-08-31T04:46:36.000Z">
 <meta property="article:author" content="Ma Xiaowei">
+<meta property="article:tag" content="git">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://hexoa.oss-cn-shanghai.aliyuncs.com/img/20201102160829.jpg">
+<meta name="twitter:image" content="https://hexoa.oss-cn-shanghai.aliyuncs.com/img/202108311327886.png!def">
 
-<link rel="canonical" href="https://www.maxiaowei.tech/posts/3268952981.html">
+<link rel="canonical" href="https://www.maxiaowei.tech/posts/3681943647.html">
 
 
 <script id="page-configurations">
@@ -49,7 +50,7 @@
   };
 </script>
 
-  <title>C专家编程(4) | Xiaowei's Blog</title>
+  <title>利用commitizen+commitlint+husky规范代码提交注释 | Xiaowei's Blog</title>
   
 
 
@@ -203,7 +204,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://www.maxiaowei.tech/posts/3268952981.html">
+    <link itemprop="mainEntityOfPage" href="https://www.maxiaowei.tech/posts/3681943647.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -216,7 +217,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          C专家编程(4)
+          利用commitizen+commitlint+husky规范代码提交注释
         </h1>
 
         <div class="post-meta">
@@ -226,22 +227,15 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2020-11-02 15:52:38" itemprop="dateCreated datePublished" datetime="2020-11-02T15:52:38+08:00">2020-11-02</time>
+              <time title="创建时间：2021-08-31 12:46:36" itemprop="dateCreated datePublished" datetime="2021-08-31T12:46:36+08:00">2021-08-31</time>
             </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-08-28 16:38:24" itemprop="dateModified" datetime="2021-08-28T16:38:24+08:00">2021-08-28</time>
-              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="far fa-folder"></i>
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/c-language/" itemprop="url" rel="index"><span itemprop="name">C语言</span></a>
+                  <a href="/categories/tools/" itemprop="url" rel="index"><span itemprop="name">工具</span></a>
                 </span>
             </span>
 
@@ -261,8 +255,8 @@
       </span>
       <span class="post-meta-item-text">Valine：</span>
     
-    <a title="valine" href="/posts/3268952981.html#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/posts/3268952981.html" itemprop="commentCount"></span>
+    <a title="valine" href="/posts/3681943647.html#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/posts/3681943647.html" itemprop="commentCount"></span>
     </a>
   </span>
   
@@ -272,14 +266,14 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>1.3k</span>
+              <span>2.2k</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
                 <i class="far fa-clock"></i>
               </span>
                 <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>1 分钟</span>
+              <span>2 分钟</span>
             </span>
 
         </div>
@@ -291,62 +285,48 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h1 id="数组与指针"><a href="#数组与指针" class="headerlink" title="数组与指针"></a>数组与指针</h1><p>在大部分情况下，数组和指针是可以互换的。书中的第4章主要讲解了数组和指针的不同之处，而在第9章则着重讨论两者可以互换的场景。</p>
+        <p>最近在研究腾讯的自动化部署功能时，发现有篇文档介绍了如何规范代码提交：<a target="_blank" rel="noopener" href="https://help.coding.net/docs/ci/lint/git-commit.html">Git commit message 规范</a>，然而在按照文档进行操作时，却无法正确运行。通过搜索发现，主要是husky已经升级到了<code>7</code>版本，与之前的版本无法兼容。下文记录了该方案的安装过程，备后续部署时参考。</p>
+<h1 id="安装commitizen"><a href="#安装commitizen" class="headerlink" title="安装commitizen"></a>安装commitizen</h1><p><code>commitizen</code>在提交代码的时候提供了一个交互式的选择界面，方便用户自动生成符合规范的代码提交注释。</p>
+<p>使用如下命令即可安装<code>commitizen</code>：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">npm install -g commitizen cz-conventional-changelog</span><br><span class="line">echo &#x27;&#123; &quot;path&quot;: &quot;cz-conventional-changelog&quot; &#125;&#x27; &gt; ~/.czrc</span><br></pre></td></tr></table></figure>
+
+<p>在powershell中，生成的<code>.czrc文件</code>是utf-16格式的，需要修改成utf-8格式。</p>
+<p>之后，使用<code>git cz</code>或<code>cz</code>代替原来的<code>git commit -m</code>命令进行代码提交。</p>
+<p><img src="https://hexoa.oss-cn-shanghai.aliyuncs.com/img/202108311327886.png!def" alt="image-20210831132718689"></p>
+<p>如上图所示，使用上下方向按键即可选择提交类别，之后的内容按照提示填写即可。</p>
+<p>该方案使用的是angular项目的规范，各字段的详细说明可参考：<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/132348944">使用 commitizen 规范 Git 提交说明 - 知乎 (zhihu.com)</a></p>
 <span id="more"></span>
 
-<h2 id="不同之处"><a href="#不同之处" class="headerlink" title="不同之处"></a>不同之处</h2><p>对于两者的不同之处，主要在于访问两者时有一些不同。</p>
-<p>编译器会为每个变量分配一个地址，每个符号的地址在编译时可知（如数组的名字）。那么在访问数组中的数据时，可以通过符号表直接得出数组的起始地址，加上偏移量即可访问对应的数据。</p>
-<p>而对于指针，必须先在运行时取得它当前存储的值，再对它解引用来获取（数组的）起始值，最后才能加上偏移量来访问数据。</p>
-<img src="https://hexoa.oss-cn-shanghai.aliyuncs.com/img/20201102160829.jpg" style="zoom:33%;" />
+<h1 id="安装commitlint"><a href="#安装commitlint" class="headerlink" title="安装commitlint"></a>安装commitlint</h1><p><code>commitlint</code>是一个提交注释检查工具，可以根据指定的规则对提交信息进行检查。使用如下命令进行安装：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">npm install --save-dev @commitlint/cli @commitlint/config-conventional</span><br><span class="line">echo &quot;module.exports = &#123; extends: [&#x27;@commitlint/config-conventional&#x27;] &#125;;&quot; &gt; commitlint.config.js</span><br></pre></td></tr></table></figure>
 
-<hr>
-<img src="https://hexoa.oss-cn-shanghai.aliyuncs.com/img/20201102160911.jpg" style="zoom:33%;" />
+<p>对于第二行的配置信息，除了单独在<code>commitlint.config.js</code>文件中进行指定，还可以在项目的<code>package.json</code>中新建一个<code>commitlint</code>块，在其中进行指定。</p>
+<p>可以使用<code>npx commitlint --from=HEAD~1</code>检查上一条提交信息是否符合规范，还可以指定它从文件中读取信息进行检测。</p>
+<p><img src="https://hexoa.oss-cn-shanghai.aliyuncs.com/img/202108311349809.png!def" alt="image-20210831134917745"></p>
+<h1 id="安装husky实现自动检测"><a href="#安装husky实现自动检测" class="headerlink" title="安装husky实现自动检测"></a>安装husky实现自动检测</h1><p>每次在提交前使用命令手动测试是很麻烦的，可以使用hook工具自动在提交时检测提交的注释是否合规。对于git来说，<code>husky</code>是一个很好用的hook工具。</p>
+<p>目前，部分教程文档都将配置信息放到<code>package.json</code>的husky字段中，如：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&quot;husky&quot;</span>: &#123;</span><br><span class="line">    <span class="attr">&quot;hooks&quot;</span>: &#123;</span><br><span class="line">      <span class="attr">&quot;commit-msg&quot;</span>: <span class="string">&quot;commitlint -E HUSKY_GIT_PARAMS&quot;</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;,</span><br></pre></td></tr></table></figure>
 
-<h3 id="其他区别"><a href="#其他区别" class="headerlink" title="其他区别"></a>其他区别</h3><table>
-<thead>
-<tr>
-<th align="left">指针</th>
-<th>数组</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="left">保存数据的地址</td>
-<td>保存数据</td>
-</tr>
-<tr>
-<td align="left">间接访问数据，首先取得指针的内容，把它作为地址，然后从这个地址提取数据。<br />如果指针有一个下标[i]，就把指针的内容加上i作为地址，从中提取数据</td>
-<td>直接访问数据，a[i]只是简单的a+i为地址取得数据</td>
-</tr>
-<tr>
-<td align="left">通常用于动态数据结构</td>
-<td>通常用于存储固定数目且数据类型相同的元素</td>
-</tr>
-<tr>
-<td align="left">相关的函数为malloc()，free()</td>
-<td>隐式分配和删除</td>
-</tr>
-<tr>
-<td align="left">通常指向匿名数据</td>
-<td>自身即为数据名</td>
-</tr>
-</tbody></table>
-<h2 id="相同之处"><a href="#相同之处" class="headerlink" title="相同之处"></a>相同之处</h2><p>在书中，主要从“声明”和“使用”两种情况下进行讨论，直接看图：</p>
-<img src="https://hexoa.oss-cn-shanghai.aliyuncs.com/img/20201102162819.jpg" style="zoom:30%;" />
+<p>此方法尝试无效，可能是版本不兼容的问题。当前安装的husky版本为7.0.2，不保证之后的版本适用下文的安装和使用方式，安装过程建议参考官方文档<a target="_blank" rel="noopener" href="https://typicode.github.io/husky/#/">Husky - Git hooks (typicode.github.io)</a>。</p>
+<h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><p>对于Unix类系统，直接使用<code>npx husky-init &amp;&amp; npm install</code>进行安装即可，会自动完成所有的安装步骤。windows系统的powershell似乎不支持&amp;&amp;操作符，只能手动进行安装：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 1. 安装husky</span></span><br><span class="line">npm install husky --save-dev</span><br><span class="line"><span class="meta">#</span><span class="bash"> 2. 激活hooks</span></span><br><span class="line">npx husky install</span><br><span class="line">npm set-script prepare &quot;husky install&quot;</span><br></pre></td></tr></table></figure>
 
-<p>在C语言标准中，有若干条规则对两者间的联系进行了说明，本书作者对其进行了进一步的说明：</p>
-<blockquote>
-<ol>
-<li>“表达式中的数组名”就是指针</li>
-<li>C语言把数组下标作为指针的偏移量</li>
-<li>“作为函数参数的数组名”等同于指针</li>
+<p>如果成功安装，在项目根目录会出现<code>.husky</code>目录，其内容如下所示，如果是使用的自动安装的方式，应该还会多一个<code>pre-commit</code>文件，指定了commit之前的操作，如果不需要可以删除。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">\.husky</span><br><span class="line">└─_</span><br><span class="line">  └─.gitignore</span><br><span class="line">  └─husky.sh</span><br></pre></td></tr></table></figure>
+
+<h2 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h2><p>可以使用<code>npx husky add&quot;</code>命令来创建hook脚本，我们需要在进行commit操作时对提交信息进行检测，则应该对<code>commit-msg</code>阶段进行hook，具体指令为<code>npx husky add .husky/commit-msg &#39;npx --no-install commitlint --edit &quot;$1&quot;&#39;</code>。执行后，在<code>.husky</code>目录新增了commit-msg文件，其内容如下：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">!/bin/sh</span></span><br><span class="line">. &quot;$(dirname &quot;$0&quot;)/_/husky.sh&quot;</span><br><span class="line"></span><br><span class="line">npx --no-install commitlint --edit $1</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>可以手动修改文件内容，以执行不同的操作。</p>
+<p>当我们尝试提交时，输入了不符合规范的提交信息，则会对出错的地方给出提示，同时本次提交也不会成功。</p>
+<p><img src="https://hexoa.oss-cn-shanghai.aliyuncs.com/img/202108311428040.png!def" alt="image-20210831142840971"></p>
+<h1 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h1><ol>
+<li><a target="_blank" rel="noopener" href="https://help.coding.net/docs/ci/lint/git-commit.html">Git commit message 规范 - CODING 帮助中心</a></li>
+<li><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/132348944">使用 commitizen 规范 Git 提交说明 - 知乎 (zhihu.com)</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/36d970a2b4da">简单使用Commitizen-规范你的commit message - 简书 (jianshu.com)</a></li>
+<li><a target="_blank" rel="noopener" href="https://typicode.github.io/husky/#/">Husky - Git hooks (typicode.github.io)</a></li>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/crper/article/details/118909053">husky 7 + lint-staged 11+ prettier 2 + eslint 7 配置_CRPER-CSDN博客</a></li>
 </ol>
-</blockquote>
-<h3 id="编程挑战"><a href="#编程挑战" class="headerlink" title="编程挑战"></a>编程挑战</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> PR(fmt,val) printf(#val <span class="meta-string">&quot; = %&quot;</span> #fmt <span class="meta-string">&quot;\t&quot;</span>, (val))</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> NL putchar(<span class="meta-string">&#x27;\n&#x27;</span>)</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> PRINT1(f,x1) PR(f,x1), NL</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> PRINT3(f,x1,x2,x3) PR(f,x1), PRINT2(f,x2,x3)</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">func1</span><span class="params">(<span class="keyword">char</span> ca[])</span> </span>&#123; PRINT3(<span class="meta">#x, &amp;ca, &amp;(ca[0]), &amp;(ca[1])); &#125;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">static</span> <span class="keyword">void</span> func2(<span class="keyword">char</span>* pa)</span><br><span class="line">&#123;</span><br><span class="line">  PRINT3(<span class="meta">#x, &amp;pa, &amp;(pa[0]), &amp;(pa[1]));</span></span><br><span class="line">  PRINT1(<span class="meta">#x, ++pa);</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">char</span> ga[] = <span class="string">&quot;abcdefg&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">int</span> main()</span><br><span class="line">&#123;</span><br><span class="line">  PRINT3(<span class="meta">#x, &amp;ga, &amp;(ga[0]), &amp;(ga[1]));</span></span><br><span class="line">  func1(ga);</span><br><span class="line">  func2(ga);</span><br><span class="line">  <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>运行结果如下：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&amp;ga = 0x37c3b010        &amp;(ga[0]) = 0x37c3b010   &amp;(ga[1]) = 0x37c3b011</span><br><span class="line">&amp;ca = 0x7f38c918        &amp;(ca[0]) = 0x37c3b010   &amp;(ca[1]) = 0x37c3b011</span><br><span class="line">&amp;pa = 0x7f38c918        &amp;(pa[0]) = 0x37c3b010   &amp;(pa[1]) = 0x37c3b011</span><br><span class="line">++pa = 0x37c3b011</span><br></pre></td></tr></table></figure>
-
-<p>可以看出作为参数，数组的地址和数组的第一个元素的地址是不同的。</p>
 
     </div>
 
@@ -355,6 +335,9 @@
     
 
       <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/git/" rel="tag"># git</a>
+          </div>
 
         
 
@@ -362,13 +345,10 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/posts/2375669074.html" rel="prev" title="C专家编程(3)">
-      <i class="fa fa-chevron-left"></i> C专家编程(3)
+    <a href="/posts/1662951709.html" rel="prev" title="利用frp实现内外网https访问">
+      <i class="fa fa-chevron-left"></i> 利用frp实现内外网https访问
     </a></div>
-      <div class="post-nav-item">
-    <a href="/posts/3649803512.html" rel="next" title="UNIX环境高级编程（11-线程）">
-      UNIX环境高级编程（11-线程） <i class="fa fa-chevron-right"></i>
-    </a></div>
+      <div class="post-nav-item"></div>
     </div>
       </footer>
     
@@ -428,7 +408,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%95%B0%E7%BB%84%E4%B8%8E%E6%8C%87%E9%92%88"><span class="nav-number">1.</span> <span class="nav-text">数组与指针</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%8D%E5%90%8C%E4%B9%8B%E5%A4%84"><span class="nav-number">1.1.</span> <span class="nav-text">不同之处</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%B6%E4%BB%96%E5%8C%BA%E5%88%AB"><span class="nav-number">1.1.1.</span> <span class="nav-text">其他区别</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%9B%B8%E5%90%8C%E4%B9%8B%E5%A4%84"><span class="nav-number">1.2.</span> <span class="nav-text">相同之处</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BC%96%E7%A8%8B%E6%8C%91%E6%88%98"><span class="nav-number">1.2.1.</span> <span class="nav-text">编程挑战</span></a></li></ol></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AE%89%E8%A3%85commitizen"><span class="nav-number">1.</span> <span class="nav-text">安装commitizen</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AE%89%E8%A3%85commitlint"><span class="nav-number">2.</span> <span class="nav-text">安装commitlint</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AE%89%E8%A3%85husky%E5%AE%9E%E7%8E%B0%E8%87%AA%E5%8A%A8%E6%A3%80%E6%B5%8B"><span class="nav-number">3.</span> <span class="nav-text">安装husky实现自动检测</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%89%E8%A3%85"><span class="nav-number">3.1.</span> <span class="nav-text">安装</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%85%8D%E7%BD%AE"><span class="nav-number">3.2.</span> <span class="nav-text">配置</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99"><span class="nav-number">4.</span> <span class="nav-text">参考资料</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
