@@ -1,1504 +1,282 @@
-<!DOCTYPE html>
-<html lang="zh-CN">
-<head>
-  <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
-<meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 5.4.0">
-  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
-  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
-  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
-  <link rel="mask-icon" href="/images/logo.svg" color="#222">
-
-<link rel="stylesheet" href="/css/main.css">
-
-
-<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
-
-<script id="hexo-configurations">
-    var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"www.maxiaowei.tech","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"valine","storage":true,"lazyload":false,"nav":null,"activeClass":"valine"},"algolia":{"appID":"T7TLZU5A5Q","apiKey":"9bc09b3c19296d4e5e7fc532e4fb0280","indexName":"hexo_next","hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
-  </script>
-
-  <meta property="og:type" content="website">
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Xiaowei's Blog</title><meta name="author" content="Ma Xiaowei"><meta name="copyright" content="Ma Xiaowei"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta property="og:type" content="website">
 <meta property="og:title" content="Xiaowei&#39;s Blog">
 <meta property="og:url" content="https://www.maxiaowei.tech/index.html">
 <meta property="og:site_name" content="Xiaowei&#39;s Blog">
 <meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png">
 <meta property="article:author" content="Ma Xiaowei">
 <meta name="twitter:card" content="summary">
-
-<link rel="canonical" href="https://www.maxiaowei.tech/">
-
-
-<script id="page-configurations">
-  // https://hexo.io/docs/variables.html
-  CONFIG.page = {
-    sidebar: "",
-    isHome : true,
-    isPost : false,
-    lang   : 'zh-CN'
-  };
-</script>
-
-  <title>Xiaowei's Blog</title>
-  
-
-
-  <script>
-    var _hmt = _hmt || [];
-    (function() {
-      var hm = document.createElement("script");
-      hm.src = "https://hm.baidu.com/hm.js?75c77a06128d0e6c104a661fbbe692bf";
-      var s = document.getElementsByTagName("script")[0];
-      s.parentNode.insertBefore(hm, s);
-    })();
-  </script>
-
-
-
-
-  <noscript>
-  <style>
-  .use-motion .brand,
-  .use-motion .menu-item,
-  .sidebar-inner,
-  .use-motion .post-block,
-  .use-motion .pagination,
-  .use-motion .comments,
-  .use-motion .post-header,
-  .use-motion .post-body,
-  .use-motion .collection-header { opacity: initial; }
-
-  .use-motion .site-title,
-  .use-motion .site-subtitle {
-    opacity: initial;
-    top: initial;
+<meta name="twitter:image" content="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://www.maxiaowei.tech/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/instantsearch.js@2.10.5/dist/instantsearch.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/instantsearch.js@2.10.5/dist/instantsearch.min.js" defer></script><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: {"appId":"T7TLZU5A5Q","apiKey":"9bc09b3c19296d4e5e7fc532e4fb0280","indexName":"hexo_next","hits":{"per_page":6},"languages":{"input_placeholder":"搜索文章","hits_empty":"找不到您查询的内容：${query}","hits_stats":"找到 ${hits} 条结果，用时 ${time} 毫秒"}},
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: {"chs_to_cht":"你已切换为繁体","cht_to_chs":"你已切换为简体","day_to_night":"你已切换为深色模式","night_to_day":"你已切换为浅色模式","bgLight":"#49b1f5","bgDark":"#121212","position":"bottom-left"},
+  source: {
+    jQuery: 'https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js',
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+    },
+    fancybox: {
+      js: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isanchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Xiaowei\'s Blog',
+  isPost: false,
+  isHome: true,
+  isHighlightShrink: false,
+  isToc: false,
+  postUpdate: '2021-09-14 12:07:37'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
   }
 
-  .use-motion .logo-line-before i { left: initial; }
-  .use-motion .logo-line-after i { right: initial; }
-  </style>
-</noscript>
-
-</head>
-
-<body itemscope itemtype="http://schema.org/WebPage">
-  <div class="container use-motion">
-    <div class="headband"></div>
-
-    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
-      <div class="header-inner"><div class="site-brand-container">
-  <div class="site-nav-toggle">
-    <div class="toggle" aria-label="切换导航栏">
-      <span class="toggle-line toggle-line-first"></span>
-      <span class="toggle-line toggle-line-middle"></span>
-      <span class="toggle-line toggle-line-last"></span>
-    </div>
-  </div>
-
-  <div class="site-meta">
-
-    <a href="/" class="brand" rel="start">
-      <span class="logo-line-before"><i></i></span>
-      <h1 class="site-title">Xiaowei's Blog</h1>
-      <span class="logo-line-after"><i></i></span>
-    </a>
-  </div>
-
-  <div class="site-nav-right">
-    <div class="toggle popup-trigger">
-        <i class="fa fa-search fa-fw fa-lg"></i>
-    </div>
-  </div>
-</div>
-
-
-
-
-<nav class="site-nav">
-  <ul id="menu" class="main-menu menu">
-        <li class="menu-item menu-item-home">
-
-    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
-
-  </li>
-        <li class="menu-item menu-item-tags">
-
-    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
-
-  </li>
-        <li class="menu-item menu-item-categories">
-
-    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
-
-  </li>
-        <li class="menu-item menu-item-archives">
-
-    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
-
-  </li>
-        <li class="menu-item menu-item-sitemap">
-
-    <a href="/sitemap.xml" rel="section"><i class="fa fa-sitemap fa-fw"></i>站点地图</a>
-
-  </li>
-      <li class="menu-item menu-item-search">
-        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
-        </a>
-      </li>
-  </ul>
-</nav>
-
-
-
-  <div class="search-pop-overlay">
-    <div class="popup search-popup">
-        <div class="search-header">
-  <span class="search-icon">
-    <i class="fa fa-search"></i>
-  </span>
-  <div class="search-input-container"></div>
-  <span class="popup-btn-close">
-    <i class="fa fa-times-circle"></i>
-  </span>
-</div>
-<div class="algolia-results">
-  <div id="algolia-stats"></div>
-  <div id="algolia-hits"></div>
-  <div id="algolia-pagination" class="algolia-pagination"></div>
-</div>
-
-      
-    </div>
-  </div>
-
-</div>
-    </header>
-
-    
-  <div class="back-to-top">
-    <i class="fa fa-arrow-up"></i>
-    <span>0%</span>
-  </div>
-
-
-    <main class="main">
-      <div class="main-inner">
-        <div class="content-wrap">
-          
-
-          <div class="content index posts-expand">
-            
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://www.maxiaowei.tech/posts/3681943647.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Ma Xiaowei">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Xiaowei's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/posts/3681943647.html" class="post-title-link" itemprop="url">利用commitizen+commitlint+husky规范代码提交注释</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2021-08-31 12:46:36" itemprop="dateCreated datePublished" datetime="2021-08-31T12:46:36+08:00">2021-08-31</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/tools/" itemprop="url" rel="index"><span itemprop="name">工具</span></a>
-                </span>
-            </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine：</span>
-    
-    <a title="valine" href="/posts/3681943647.html#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/posts/3681943647.html" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>2.2k</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>2 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>最近在研究腾讯的自动化部署功能时，发现有篇文档介绍了如何规范代码提交：<a target="_blank" rel="noopener" href="https://help.coding.net/docs/ci/lint/git-commit.html">Git commit message 规范</a>，然而在按照文档进行操作时，却无法正确运行。通过搜索发现，主要是husky已经升级到了<code>7</code>版本，与之前的版本无法兼容。下文记录了该方案的安装过程，备后续部署时参考。</p>
-<h1 id="安装commitizen"><a href="#安装commitizen" class="headerlink" title="安装commitizen"></a>安装commitizen</h1><p><code>commitizen</code>在提交代码的时候提供了一个交互式的选择界面，方便用户自动生成符合规范的代码提交注释。</p>
-<p>使用如下命令即可安装<code>commitizen</code>：</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">npm install -g commitizen cz-conventional-changelog</span><br><span class="line">echo &#x27;&#123; &quot;path&quot;: &quot;cz-conventional-changelog&quot; &#125;&#x27; &gt; ~/.czrc</span><br></pre></td></tr></table></figure>
-
-<p>在powershell中，生成的<code>.czrc文件</code>是utf-16格式的，需要修改成utf-8格式。</p>
-<p>之后，使用<code>git cz</code>或<code>cz</code>代替原来的<code>git commit -m</code>命令进行代码提交。</p>
-<p><img src="https://hexoa.oss-cn-shanghai.aliyuncs.com/img/202108311327886.png!def" alt="image-20210831132718689"></p>
-<p>如上图所示，使用上下方向按键即可选择提交类别，之后的内容按照提示填写即可。</p>
-<p>该方案使用的是angular项目的规范，各字段的详细说明可参考：<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/132348944">使用 commitizen 规范 Git 提交说明 - 知乎 (zhihu.com)</a></p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/posts/3681943647.html#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://www.maxiaowei.tech/posts/1662951709.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Ma Xiaowei">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Xiaowei's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/posts/1662951709.html" class="post-title-link" itemprop="url">利用frp实现内外网https访问</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2021-08-22 10:16:23" itemprop="dateCreated datePublished" datetime="2021-08-22T10:16:23+08:00">2021-08-22</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/nas/" itemprop="url" rel="index"><span itemprop="name">nas</span></a>
-                </span>
-            </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine：</span>
-    
-    <a title="valine" href="/posts/1662951709.html#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/posts/1662951709.html" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>2.2k</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>2 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>自建的nextcloud在使用docker部署时，没有选择映射80端口，而且其默认的nginx配置也是把80端口的访问重定向到了443端口，因此只能使用https协议访问。搜索网上资料时发现，大部分的frp（<a target="_blank" rel="noopener" href="https://github.com/fatedier/frp">fatedier/frp</a>）教程是把外网的https访问转换成http协议来访问内网客户端，这显然不符合我的需求。</p>
-<p>查看frp的发行日志，发现其在0.36版本开始新增了<code>https2https</code>插件，实现了内外网的https转换，下面就做一个简单记录。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/posts/1662951709.html#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://www.maxiaowei.tech/posts/2670779669.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Ma Xiaowei">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Xiaowei's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/posts/2670779669.html" class="post-title-link" itemprop="url">安装nextcloud和onlyoffice遇到的坑</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2021-08-17 14:27:54" itemprop="dateCreated datePublished" datetime="2021-08-17T14:27:54+08:00">2021-08-17</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/nas/" itemprop="url" rel="index"><span itemprop="name">nas</span></a>
-                </span>
-            </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine：</span>
-    
-    <a title="valine" href="/posts/2670779669.html#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/posts/2670779669.html" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>2.9k</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>3 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>本文记录使用docker安装nextcloud和onlyoffice时，遇到的问题及解决方法。</p>
-<p>本机的操作系统为TrueNAS-SCALE-21.06-BETA.1，docker版本20.10.6。</p>
-<h1 id="安装nextcloud"><a href="#安装nextcloud" class="headerlink" title="安装nextcloud"></a>安装nextcloud</h1><p>推荐使用linuxserver发布的镜像，配置参数少，默认使用nginx。<a target="_blank" rel="noopener" href="https://hub.docker.com/r/linuxserver/nextcloud">linuxserver/nextcloud - Docker Image | Docker Hub</a></p>
-<p>下文所说的config目录均为映射的container内部的/config目录，例如使用 <code>-v /path/to/appdata:/config</code>，则下文的的config/目录即为<code>/path/to/appdata/</code>。</p>
-<p>安装完成后，由于映射的443端口，因此需要配置证书。考虑到仅在局域网内使用，因此还是使用上篇文章生成的web证书。</p>
-<p>查看<code>config/nginx/site-confs/default</code>配置文件，截取部分内容如下：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">server &#123;</span><br><span class="line">    listen 443 ssl http2;</span><br><span class="line">    listen [::]:443 ssl http2;</span><br><span class="line">    server_name _;</span><br><span class="line">    ssl_certificate /config/keys/cert.crt;</span><br><span class="line">    ssl_certificate_key /config/keys/cert.key;</span><br></pre></td></tr></table></figure>
-
-<p>发现证书的存放位置为config/keys，且需要命名为cert。当然位置及名字可以根据自己的需要修改。将证书放入对应位置后，重新刷新页面看证书是否被正确识别，如果有问题可以重启nextcloud试试。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/posts/2670779669.html#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://www.maxiaowei.tech/posts/128566356.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Ma Xiaowei">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Xiaowei's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/posts/128566356.html" class="post-title-link" itemprop="url">局域网内服务器证书申请</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2021-08-14 19:13:33" itemprop="dateCreated datePublished" datetime="2021-08-14T19:13:33+08:00">2021-08-14</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/server/" itemprop="url" rel="index"><span itemprop="name">server</span></a>
-                </span>
-            </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine：</span>
-    
-    <a title="valine" href="/posts/128566356.html#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/posts/128566356.html" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>1.4k</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>1 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>为了可以使用https协议访问局域网内的服务器，收集并整理了网上有关局域网证书签发的资料。</p>
-<h1 id="生成CA"><a href="#生成CA" class="headerlink" title="生成CA"></a>生成CA</h1><ol>
-<li><p>创建CA使用的密钥</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">openssl genrsa -out ca.key</span><br></pre></td></tr></table></figure></li>
-<li><p>生成根CA证书</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">openssl req -new -x509 -key ca.key -out ca.crt -days 3650</span><br></pre></td></tr></table></figure></li>
-<li><p>将CA证书放入受信任的根证书颁发机构（windows系统）</p>
-</li>
-</ol>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/posts/128566356.html#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://www.maxiaowei.tech/posts/4201669077.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Ma Xiaowei">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Xiaowei's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/posts/4201669077.html" class="post-title-link" itemprop="url">Kotlin开发Android的小技巧</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2021-03-11 14:11:33" itemprop="dateCreated datePublished" datetime="2021-03-11T14:11:33+08:00">2021-03-11</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Android/" itemprop="url" rel="index"><span itemprop="name">Android</span></a>
-                </span>
-            </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine：</span>
-    
-    <a title="valine" href="/posts/4201669077.html#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/posts/4201669077.html" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>2.2k</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>2 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>本文主要用于记录自己开发过程中觉得好用的编码技巧，主要来自于第三版的《第一行代码Android》以及博客。</p>
-<h2 id="启动Activity"><a href="#启动Activity" class="headerlink" title="启动Activity"></a>启动Activity</h2><p>常见的启动Activity的方法是</p>
-<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> intent = Intent(<span class="keyword">this</span>, MyActivity::<span class="keyword">class</span>.java)</span><br><span class="line">intent.putExtra(<span class="string">&quot;param1&quot;</span>, <span class="string">&quot;data1&quot;</span>)</span><br><span class="line">intent.putExtra(<span class="string">&quot;param2&quot;</span>, <span class="string">&quot;data2&quot;</span>)</span><br><span class="line">startActivity(intent)</span><br></pre></td></tr></table></figure>
-
-<p>使用这种方法每次都要重复编码，且容易忘记需要传递的参数的信息，可以通过在Activity中定义静态方法来简化，如下所示：</p>
-<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MyActivity</span> : <span class="type">AppCompatActivity</span></span>()&#123;</span><br><span class="line">    ...</span><br><span class="line">    <span class="keyword">companion</span> <span class="keyword">object</span> &#123;</span><br><span class="line">        <span class="function"><span class="keyword">fun</span> <span class="title">actionStart</span><span class="params">(context: <span class="type">Context</span>, data1:<span class="type">String</span>, data2:<span class="type">String</span>)</span></span> &#123;</span><br><span class="line">            <span class="keyword">val</span> intent = Intent(context, MyActivity::<span class="keyword">class</span>.java)</span><br><span class="line">            intent.putExtra(<span class="string">&quot;param1&quot;</span>, data1)</span><br><span class="line">            intent.putExtra(<span class="string">&quot;param2&quot;</span>, data2)</span><br><span class="line">            context.startActivity(intent)</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>需要启动MyActivity时，只要调用<code>MyActivity.actionStart(this, &quot;data1&quot;, &quot;data2)</code>即可。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/posts/4201669077.html#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://www.maxiaowei.tech/posts/1083767513.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Ma Xiaowei">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Xiaowei's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/posts/1083767513.html" class="post-title-link" itemprop="url">UNIX环境高级编程（19-伪终端）</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2021-01-06 11:37:02" itemprop="dateCreated datePublished" datetime="2021-01-06T11:37:02+08:00">2021-01-06</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-08-28 16:38:24" itemprop="dateModified" datetime="2021-08-28T16:38:24+08:00">2021-08-28</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Linux/" itemprop="url" rel="index"><span itemprop="name">Linux</span></a>
-                </span>
-            </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine：</span>
-    
-    <a title="valine" href="/posts/1083767513.html#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/posts/1083767513.html" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>8.6k</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>8 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h1><p>伪终端是指，对于一个应用程序，它看上去是一个终端，而实际上却并不是一个真正的终端。</p>
-<p>父进程首先打开一个伪终端主设备，随后fork，子进程打开相应的伪终端从设备，并将该文件描述符复制到stdin/out/err，最后调用exec。</p>
-<p>对于伪终端从设备上的用户进程来说，其stdin/out/err都是终端设备，因此可以处理上一章介绍的各类终端I/O函数。并且，所有写到伪终端主设备的都会作为从设备的输入，反之亦然。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/posts/1083767513.html#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://www.maxiaowei.tech/posts/255074044.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Ma Xiaowei">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Xiaowei's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/posts/255074044.html" class="post-title-link" itemprop="url">UNIX环境高级编程（18-终端I/O）</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-12-30 15:59:07" itemprop="dateCreated datePublished" datetime="2020-12-30T15:59:07+08:00">2020-12-30</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Linux/" itemprop="url" rel="index"><span itemprop="name">Linux</span></a>
-                </span>
-            </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine：</span>
-    
-    <a title="valine" href="/posts/255074044.html#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/posts/255074044.html" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>4.8k</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>4 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>本章主要介绍终端的相关概念，及一些修改终端操作的函数。</p>
-<h1 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h1><h2 id="工作模式"><a href="#工作模式" class="headerlink" title="工作模式"></a>工作模式</h2><p>主要有以下两种工作模式：</p>
-<ul>
-<li>规范模式（Canonical mode）输入处理。在此模式下，对于终端的输入以行为单位进行处理。每次读取最多返回一行。这是默认的模式。</li>
-<li>非规范模式（Noncanonical mode）输入处理。输入字符不装配成行，一些特殊字符（如Ctrl+D）以不会进行处理。</li>
-</ul>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/posts/255074044.html#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://www.maxiaowei.tech/posts/2640012016.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Ma Xiaowei">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Xiaowei's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/posts/2640012016.html" class="post-title-link" itemprop="url">UNIX环境高级编程（15-进程间通信）</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-12-21 17:29:05" itemprop="dateCreated datePublished" datetime="2020-12-21T17:29:05+08:00">2020-12-21</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Linux/" itemprop="url" rel="index"><span itemprop="name">Linux</span></a>
-                </span>
-            </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine：</span>
-    
-    <a title="valine" href="/posts/2640012016.html#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/posts/2640012016.html" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>9.2k</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>8 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>本章主要介绍一些进程间通信的方式，如管道、消息队列、信号量和共享存储等。</p>
-<h1 id="管道"><a href="#管道" class="headerlink" title="管道"></a>管道</h1><p>一般来说，管道是半双工的（即数据只能在一个方向上流动），并且只能在具有公共祖先的两个进程之间使用。通常，父进程创建管道后会接着调用<code>fork</code>，从而利用管道在父子进程之间通信。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/posts/2640012016.html#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://www.maxiaowei.tech/posts/3327551038.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Ma Xiaowei">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Xiaowei's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/posts/3327551038.html" class="post-title-link" itemprop="url">UNIX环境高级编程（14-高级I/O）</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-12-09 09:48:40" itemprop="dateCreated datePublished" datetime="2020-12-09T09:48:40+08:00">2020-12-09</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Linux/" itemprop="url" rel="index"><span itemprop="name">Linux</span></a>
-                </span>
-            </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine：</span>
-    
-    <a title="valine" href="/posts/3327551038.html#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/posts/3327551038.html" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>7.7k</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>7 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>本章主要介绍几种高级I/O功能，主要有非阻塞I/O、记录锁、I/O多路转接、异步I/O、readv/writev函数和存储映射I/O。</p>
-<h1 id="非阻塞I-O"><a href="#非阻塞I-O" class="headerlink" title="非阻塞I/O"></a>非阻塞I/O</h1><p>某些系统调用可能会使进程永远阻塞，一般称其为低速系统调用。而使用非阻塞I/O，可以使<code>open</code>、<code>read</code>和<code>write</code>这类I/O操作不会阻塞，如果不能完成这些操作时，会立即出错返回。</p>
-<p>有两种方法将其指定为非阻塞I/O：</p>
-<ul>
-<li><p>调用<code>open</code>时指定<code>O_NONBLOCK</code>标志。</p>
-</li>
-<li><p>通过<code>fcntl</code>函数打开<code>O_NONBLOCK</code>文件状态标志。</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;fcntl.h&gt;</span></span></span><br><span class="line"><span class="comment">// Returns: depends on cmd if OK (see following), −1 on error</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">fcntl</span><span class="params">(<span class="keyword">int</span> fd, <span class="keyword">int</span> cmd, ... <span class="comment">/* int arg */</span> )</span></span>;</span><br></pre></td></tr></table></figure>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/posts/3327551038.html#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://www.maxiaowei.tech/posts/1130609607.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Ma Xiaowei">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Xiaowei's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/posts/1130609607.html" class="post-title-link" itemprop="url">UNIX环境高级编程（13-守护进程）</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-12-04 14:39:01" itemprop="dateCreated datePublished" datetime="2020-12-04T14:39:01+08:00">2020-12-04</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Linux/" itemprop="url" rel="index"><span itemprop="name">Linux</span></a>
-                </span>
-            </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine：</span>
-    
-    <a title="valine" href="/posts/1130609607.html#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/posts/1130609607.html" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>1.3k</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>1 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="主要特点"><a href="#主要特点" class="headerlink" title="主要特点"></a>主要特点</h1><ul>
-<li>一般在系统启动时装入，仅在系统关闭时终止。</li>
-<li>大多数守护进程以超级用户特权运行。</li>
-<li>所有的守护进程都没有控制终端，其终端名设置为问号。<ul>
-<li>内核守护进程以无控制终端方式启动。</li>
-<li>用户层守护进程可以通过调用<code>setsid</code>实现。</li>
-</ul>
-</li>
-<li>用户层守护进程的父进程是init进程。
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/posts/1130609607.html#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-
-  
-  <nav class="pagination">
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
-  </nav>
-
-
-
-          </div>
-          
-
-<script>
-  window.addEventListener('tabs:register', () => {
-    let { activeClass } = CONFIG.comments;
-    if (CONFIG.comments.storage) {
-      activeClass = localStorage.getItem('comments_active') || activeClass;
-    }
-    if (activeClass) {
-      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
-      if (activeTab) {
-        activeTab.click();
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
       }
     }
-  });
-  if (CONFIG.comments.storage) {
-    window.addEventListener('tabs:click', event => {
-      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
-      let commentClass = event.target.classList[1];
-      localStorage.setItem('comments_active', commentClass);
-    });
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if (GLOBAL_CONFIG_SITE.isHome && /iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="generator" content="Hexo 5.4.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">文章</div><div class="length-num">17</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/tags/"><div class="headline">标签</div><div class="length-num">12</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/categories/"><div class="headline">分类</div><div class="length-num">6</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div></div></div></div><div class="page" id="body-wrap"><header class="not-top-img" id="page-header"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">Xiaowei's Blog</a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav></header><main class="layout" id="content-inner"><div class="recent-posts" id="recent-posts"><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/posts/3681943647.html" title="利用commitizen+commitlint+husky规范代码提交注释">利用commitizen+commitlint+husky规范代码提交注释</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2021-08-31T04:46:36.000Z" title="发表于 2021-08-31 12:46:36">2021-08-31</time></span><span class="article-meta"><span class="article-meta__separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/tools/">工具</a></span></div><div class="content">最近在研究腾讯的自动化部署功能时，发现有篇文档介绍了如何规范代码提交：Git commit message 规范，然而在按照文档进行操作时，却无法正确运行。通过搜索发现，主要是husky已经升级到了7版本，与之前的版本无法兼容。下文记录了该方案的安装过程，备后续部署时参考。
+安装commitizencommitizen在提交代码的时候提供了一个交互式的选择界面，方便用户自动生成符合规范的代码提交注释。
+使用如下命令即可安装commitizen：
+12npm install -g commitizen cz-conventional-changelogecho &#x27;&#123; &quot;path&quot;: &quot;cz-conventional-changelog&quot; &#125;&#x27; &gt; ~/.czrc
+
+在powershell中，生成的.czrc文件是utf-16格式的，需要修改成utf-8格式。
+之后，使用git cz或cz代替原来的git commit -m命令进行代码提交。
+
+如上图所示，使用上下方向按键即可选择提交类别，之后的内容按照 ...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/posts/1662951709.html" title="利用frp实现内外网https访问">利用frp实现内外网https访问</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2021-08-22T02:16:23.000Z" title="发表于 2021-08-22 10:16:23">2021-08-22</time></span><span class="article-meta"><span class="article-meta__separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/nas/">nas</a></span></div><div class="content">自建的nextcloud在使用docker部署时，没有选择映射80端口，而且其默认的nginx配置也是把80端口的访问重定向到了443端口，因此只能使用https协议访问。搜索网上资料时发现，大部分的frp（fatedier/frp）教程是把外网的https访问转换成http协议来访问内网客户端，这显然不符合我的需求。
+查看frp的发行日志，发现其在0.36版本开始新增了https2https插件，实现了内外网的https转换，下面就做一个简单记录。
+
+
+服务器端的配置123456# filename: frps.ini[common]bind_port = 7000token = xxxxxxx# https访问时使用的端口vhost_https_port = 8000
+
+
+HTTP 和 HTTPS 协议的一个特点是发送的请求都具有 Host 字段，通过该字段描述要访问的服务。基于这个特点，frp 服务端只需要监听在一个端口(通过 vhost_http_port 和 vhost_https_port 指定)。就可以根据请求的 Host 来决定需要路由给哪一个代理，而不需要像 TCP  ...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/posts/2670779669.html" title="安装nextcloud和onlyoffice遇到的坑">安装nextcloud和onlyoffice遇到的坑</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2021-08-17T06:27:54.000Z" title="发表于 2021-08-17 14:27:54">2021-08-17</time></span><span class="article-meta"><span class="article-meta__separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/nas/">nas</a></span></div><div class="content">本文记录使用docker安装nextcloud和onlyoffice时，遇到的问题及解决方法。
+本机的操作系统为TrueNAS-SCALE-21.06-BETA.1，docker版本20.10.6。
+安装nextcloud推荐使用linuxserver发布的镜像，配置参数少，默认使用nginx。linuxserver/nextcloud - Docker Image | Docker Hub
+下文所说的config目录均为映射的container内部的/config目录，例如使用 -v /path/to/appdata:/config，则下文的的config/目录即为/path/to/appdata/。
+安装完成后，由于映射的443端口，因此需要配置证书。考虑到仅在局域网内使用，因此还是使用上篇文章生成的web证书。
+查看config/nginx/site-confs/default配置文件，截取部分内容如下：
+123456server &#123;    listen 443 ssl http2;    listen [::]:443 ssl http2;    server_nam ...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/posts/128566356.html" title="局域网内服务器证书申请">局域网内服务器证书申请</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2021-08-14T11:13:33.000Z" title="发表于 2021-08-14 19:13:33">2021-08-14</time></span><span class="article-meta"><span class="article-meta__separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/server/">server</a></span></div><div class="content">为了可以使用https协议访问局域网内的服务器，收集并整理了网上有关局域网证书签发的资料。
+生成CA
+创建CA使用的密钥
+1openssl genrsa -out ca.key
+生成根CA证书
+1openssl req -new -x509 -key ca.key -out ca.crt -days 3650
+将CA证书放入受信任的根证书颁发机构（windows系统）
+
+
+
+
+签发服务器使用的证书
+生成证书使用的密钥
+1openssl genrsa -out web.key
+生成证书请求文件CSR
+由于我们的服务器是通过ip地址或域名都可访问的，所以在申请证书时，需要修改默认的配置文件以添加额外信息。可以将默认的openssl.cnf文件复制一份后进行修改，该文件所在位置在openssl的OPENSSLDIR目录中，可以通过openssl version -a命令获取。
+1234567891011121314151617181920212223242526272829# 文件名为 openssl.cnf[ req ]default_bits		= 2048distinguished_n ...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/posts/4201669077.html" title="Kotlin开发Android的小技巧">Kotlin开发Android的小技巧</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2021-03-11T06:11:33.000Z" title="发表于 2021-03-11 14:11:33">2021-03-11</time></span><span class="article-meta"><span class="article-meta__separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Android/">Android</a></span></div><div class="content">本文主要用于记录自己开发过程中觉得好用的编码技巧，主要来自于第三版的《第一行代码Android》以及博客。
+启动Activity常见的启动Activity的方法是
+1234val intent = Intent(this, MyActivity::class.java)intent.putExtra(&quot;param1&quot;, &quot;data1&quot;)intent.putExtra(&quot;param2&quot;, &quot;data2&quot;)startActivity(intent)
+
+使用这种方法每次都要重复编码，且容易忘记需要传递的参数的信息，可以通过在Activity中定义静态方法来简化，如下所示：
+1234567891011class MyActivity : AppCompatActivity()&#123;    ...    companion object &#123;        fun actionStart(context: Context, data1:String, data2:String) &#123;       ...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/posts/1083767513.html" title="UNIX环境高级编程（19-伪终端）">UNIX环境高级编程（19-伪终端）</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2021-01-06T03:37:02.000Z" title="发表于 2021-01-06 11:37:02">2021-01-06</time></span><span class="article-meta"><span class="article-meta__separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Linux/">Linux</a></span></div><div class="content">概述伪终端是指，对于一个应用程序，它看上去是一个终端，而实际上却并不是一个真正的终端。
+父进程首先打开一个伪终端主设备，随后fork，子进程打开相应的伪终端从设备，并将该文件描述符复制到stdin/out/err，最后调用exec。
+对于伪终端从设备上的用户进程来说，其stdin/out/err都是终端设备，因此可以处理上一章介绍的各类终端I/O函数。并且，所有写到伪终端主设备的都会作为从设备的输入，反之亦然。
+
+
+其典型结构如下图所示：
+
+为说明方面，下面将伪终端简称为PTY。
+典型用途网络登录服务器如telnetd和rlogind服务器。这方面不太熟悉，故不展开讲。
+窗口系统终端模拟窗口系统通常提供一个终端模拟器，这使得我们可以在命令行环境下通过shell运行程序。
+终端模拟器是shell和窗口管理器之间的媒介。shell将自己的标准输入/输出/错误连接到PTY的从设备端，而终端模拟器则管理对应的主设备端。其大致框图如下：
+
+当用户改变模拟器的窗口大小时，窗口管理器会通知模拟器，而模拟器则在主设备端利用TIOCSWINSZ命令设置从设备的窗口大小。前台PTY从设备的进程组会收到SI ...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/posts/255074044.html" title="UNIX环境高级编程（18-终端I/O）">UNIX环境高级编程（18-终端I/O）</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2020-12-30T07:59:07.000Z" title="发表于 2020-12-30 15:59:07">2020-12-30</time></span><span class="article-meta"><span class="article-meta__separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Linux/">Linux</a></span></div><div class="content">本章主要介绍终端的相关概念，及一些修改终端操作的函数。
+概念工作模式主要有以下两种工作模式：
+
+规范模式（Canonical mode）输入处理。在此模式下，对于终端的输入以行为单位进行处理。每次读取最多返回一行。这是默认的模式。
+非规范模式（Noncanonical mode）输入处理。输入字符不装配成行，一些特殊字符（如Ctrl+D）以不会进行处理。
+
+
+
+这两种模式在后面会有详细解释。
+终端特性在结构termios中定义了终端设备全部特性的标志，在其中又将各种标志进行分类，其结构大体如下：
+1234567struct termios &#123;  tcflag_t  c_iflag;      /* input flags */  tcflag_t  c_oflag;      /* output flags */  tcflag_t  c_cflag;      /* control flags */  tcflag_t  c_lflag;      /* local flags */  cc_t      c_cc[NCCS];   /* control character ...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/posts/2640012016.html" title="UNIX环境高级编程（15-进程间通信）">UNIX环境高级编程（15-进程间通信）</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2020-12-21T09:29:05.000Z" title="发表于 2020-12-21 17:29:05">2020-12-21</time></span><span class="article-meta"><span class="article-meta__separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Linux/">Linux</a></span></div><div class="content">本章主要介绍一些进程间通信的方式，如管道、消息队列、信号量和共享存储等。
+管道一般来说，管道是半双工的（即数据只能在一个方向上流动），并且只能在具有公共祖先的两个进程之间使用。通常，父进程创建管道后会接着调用fork，从而利用管道在父子进程之间通信。
+
+
+
+之后，父子进程可以分别关闭管道的读/写端，以利用管道在父子进程中传递信息。例如，如果想要创建从父进程到子进程的管道，则可以关闭父进程的读端和子进程的写端。
+由于管道半双工的特性，想要在父子进程间双向传递信息需要建立2个管道。
+123#include &lt;unistd.h&gt;// Returns: 0 if OK, −1 on errorint pipe(int fd[2]);
+
+利用pipe函数可以创建管道，fd参数返回两个文件描述符，fd[0]为读而打开，fd[1]为写而打开。fd[1]的输出是fd[0]的输入。
+在上面的例子中，父进程关闭fd[0]，子进程关闭fd[1]，那么最后的示意图如下：
+
+注意：
+
+当读一个写端被关闭的管道，在所有数据被读取后，read返回0
+当写一个读端被关闭的管道，会产生SIGPIPE信号。如 ...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/posts/3327551038.html" title="UNIX环境高级编程（14-高级I/O）">UNIX环境高级编程（14-高级I/O）</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2020-12-09T01:48:40.000Z" title="发表于 2020-12-09 09:48:40">2020-12-09</time></span><span class="article-meta"><span class="article-meta__separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Linux/">Linux</a></span></div><div class="content">本章主要介绍几种高级I/O功能，主要有非阻塞I/O、记录锁、I/O多路转接、异步I/O、readv/writev函数和存储映射I/O。
+非阻塞I/O某些系统调用可能会使进程永远阻塞，一般称其为低速系统调用。而使用非阻塞I/O，可以使open、read和write这类I/O操作不会阻塞，如果不能完成这些操作时，会立即出错返回。
+有两种方法将其指定为非阻塞I/O：
+
+调用open时指定O_NONBLOCK标志。
+
+通过fcntl函数打开O_NONBLOCK文件状态标志。
+123#include &lt;fcntl.h&gt;// Returns: depends on cmd if OK (see following), −1 on errorint fcntl(int fd, int cmd, ... /* int arg */ );
+
+
+
+记录锁记录锁的主要功能是阻止多个进程同时修改文件的某一文件区。记录锁可以对整个文件加锁，也可以只针对文件的一部分进行加锁。
+锁的类型主要有共享读锁和独占性写锁这两种。
+加读/写锁时，文件描述符必须是读/写打开。
+任意多个进程在给定的字节上可以有一把共 ...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/posts/1130609607.html" title="UNIX环境高级编程（13-守护进程）">UNIX环境高级编程（13-守护进程）</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2020-12-04T06:39:01.000Z" title="发表于 2020-12-04 14:39:01">2020-12-04</time></span><span class="article-meta"><span class="article-meta__separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Linux/">Linux</a></span></div><div class="content">主要特点
+一般在系统启动时装入，仅在系统关闭时终止。
+大多数守护进程以超级用户特权运行。
+所有的守护进程都没有控制终端，其终端名设置为问号。
+内核守护进程以无控制终端方式启动。
+用户层守护进程可以通过调用setsid实现。
+
+
+用户层守护进程的父进程是init进程。
+
+消息输出前面提到，守护进程是没有控制终端的，显然无法将自己的消息输出到标准输出或标准错误上。而且系统中运行着许多守护进程，因此需要一个集中的守护进程记录设施，即syslog。
+
+如上图所示，主要有3中产生日志消息的方式：
+
+内核例程调用log函数
+大多数用户进程调用syslog函数
+将日志消息发送到UDP的514端口
+
+而syslogd守护进程接收这些日志消息，在其启动前会读取配置文件（/etc/syslog.conf），以决定各类消息的处理方式。
+123456#include &lt;syslog.h&gt;void openlog(const char *ident, int option, int facility);void syslog(int priority, const char *format, ... ...</div></div></div><nav id="pagination"><div class="pagination"><span class="page-number current">1</span><a class="page-number" href="/page/2/#content-inner">2</a><a class="extend next" rel="next" href="/page/2/#content-inner"><i class="fas fa-chevron-right fa-fw"></i></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">Ma Xiaowei</div><div class="author-info__description"></div></div><div class="card-info-data"><div class="card-info-data-item is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">17</div></a></div><div class="card-info-data-item is-center"><a href="/tags/"><div class="headline">标签</div><div class="length-num">12</div></a></div><div class="card-info-data-item is-center"><a href="/categories/"><div class="headline">分类</div><div class="length-num">6</div></a></div></div><a class="button--animated" id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/maxiaowei0216"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/maxiaowei0216" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="mailto:admin@maxiaowei.tech" target="_blank" title="Email"><i class="fas fa-envelope"></i></a></div></div><div class="sticky_layout"><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/posts/3681943647.html" title="利用commitizen+commitlint+husky规范代码提交注释">利用commitizen+commitlint+husky规范代码提交注释</a><time datetime="2021-08-31T04:46:36.000Z" title="发表于 2021-08-31 12:46:36">2021-08-31</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/posts/1662951709.html" title="利用frp实现内外网https访问">利用frp实现内外网https访问</a><time datetime="2021-08-22T02:16:23.000Z" title="发表于 2021-08-22 10:16:23">2021-08-22</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/posts/2670779669.html" title="安装nextcloud和onlyoffice遇到的坑">安装nextcloud和onlyoffice遇到的坑</a><time datetime="2021-08-17T06:27:54.000Z" title="发表于 2021-08-17 14:27:54">2021-08-17</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/posts/128566356.html" title="局域网内服务器证书申请">局域网内服务器证书申请</a><time datetime="2021-08-14T11:13:33.000Z" title="发表于 2021-08-14 19:13:33">2021-08-14</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/posts/4201669077.html" title="Kotlin开发Android的小技巧">Kotlin开发Android的小技巧</a><time datetime="2021-03-11T06:11:33.000Z" title="发表于 2021-03-11 14:11:33">2021-03-11</time></div></div></div></div><div class="card-widget card-categories"><div class="item-headline">
+            <i class="fas fa-folder-open"></i>
+            <span>分类</span>
+            
+            </div>
+            <ul class="card-category-list" id="aside-cat-list">
+            <li class="card-category-list-item "><a class="card-category-list-link" href="/categories/Android/"><span class="card-category-list-name">Android</span><span class="card-category-list-count">1</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/c-language/"><span class="card-category-list-name">C语言</span><span class="card-category-list-count">4</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/Linux/"><span class="card-category-list-name">Linux</span><span class="card-category-list-count">7</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/nas/"><span class="card-category-list-name">nas</span><span class="card-category-list-count">2</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/server/"><span class="card-category-list-name">server</span><span class="card-category-list-count">1</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/tools/"><span class="card-category-list-name">工具</span><span class="card-category-list-count">2</span></a></li>
+            </ul></div><div class="card-widget card-tags"><div class="item-headline"><i class="fas fa-tags"></i><span>标签</span></div><div class="card-tag-cloud"><a href="/tags/I-O/" style="font-size: 1.1em; color: #999">I/O</a> <a href="/tags/IPC/" style="font-size: 1.1em; color: #999">IPC</a> <a href="/tags/Terminal/" style="font-size: 1.3em; color: #99a1ac">Terminal</a> <a href="/tags/apue/" style="font-size: 1.5em; color: #99a9bf">apue</a> <a href="/tags/cert/" style="font-size: 1.1em; color: #999">cert</a> <a href="/tags/daemon/" style="font-size: 1.1em; color: #999">daemon</a> <a href="/tags/frp/" style="font-size: 1.1em; color: #999">frp</a> <a href="/tags/git/" style="font-size: 1.3em; color: #99a1ac">git</a> <a href="/tags/kotlin/" style="font-size: 1.1em; color: #999">kotlin</a> <a href="/tags/nextcloud/" style="font-size: 1.1em; color: #999">nextcloud</a> <a href="/tags/onlyoffice/" style="font-size: 1.1em; color: #999">onlyoffice</a> <a href="/tags/thread/" style="font-size: 1.3em; color: #99a1ac">thread</a></div></div><div class="card-widget card-archives"><div class="item-headline"><i class="fas fa-archive"></i><span>归档</span></div><ul class="card-archive-list"><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2021/08/"><span class="card-archive-list-date">八月 2021</span><span class="card-archive-list-count">4</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2021/03/"><span class="card-archive-list-date">三月 2021</span><span class="card-archive-list-count">1</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2021/01/"><span class="card-archive-list-date">一月 2021</span><span class="card-archive-list-count">1</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2020/12/"><span class="card-archive-list-date">十二月 2020</span><span class="card-archive-list-count">4</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2020/11/"><span class="card-archive-list-date">十一月 2020</span><span class="card-archive-list-count">3</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2020/10/"><span class="card-archive-list-date">十月 2020</span><span class="card-archive-list-count">4</span></a></li></ul></div><div class="card-widget card-webinfo"><div class="item-headline"><i class="fas fa-chart-line"></i><span>网站资讯</span></div><div class="webinfo"><div class="webinfo-item"><div class="item-name">文章数目 :</div><div class="item-count">17</div></div><div class="webinfo-item"><div class="item-name">已运行时间 :</div><div class="item-count" id="runtimeshow" data-publishDate="2020-10-20T00:00:00.000Z"></div></div><div class="webinfo-item"><div class="item-name">本站总字数 :</div><div class="item-count">26.7k</div></div><div class="webinfo-item"><div class="item-name">本站访客数 :</div><div class="item-count" id="busuanzi_value_site_uv"></div></div><div class="webinfo-item"><div class="item-name">本站总访问量 :</div><div class="item-count" id="busuanzi_value_site_pv"></div></div><div class="webinfo-item"><div class="item-name">最后更新时间 :</div><div class="item-count" id="last-push-date" data-lastPushDate="2021-09-14T04:07:36.764Z"></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2021 By Ma Xiaowei</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div><div class="footer_custom_text"><a target="_blank" rel="noopener" href="https://beian.miit.gov.cn/">苏ICP备20016085号-3</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div id="algolia-search"><div class="search-dialog"><div class="search-dialog__title" id="algolia-search-title">Algolia</div><div id="algolia-input-panel"><div id="algolia-search-input"></div></div><hr/><div id="algolia-search-results"><div id="algolia-hits"></div><div id="algolia-pagination"></div><div id="algolia-stats"></div></div><span class="search-close-button"><i class="fas fa-times"></i></span></div><div id="search-mask"></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.js"></script><script>function panguFn () {
+  if (typeof pangu === 'object') pangu.autoSpacingPage()
+  else {
+    getScript('https://cdn.jsdelivr.net/npm/pangu/dist/browser/pangu.min.js')
+      .then(() => {
+        pangu.autoSpacingPage()
+      })
   }
-</script>
+}
 
-        </div>
-          
-  
-  <div class="toggle sidebar-toggle">
-    <span class="toggle-line toggle-line-first"></span>
-    <span class="toggle-line toggle-line-middle"></span>
-    <span class="toggle-line toggle-line-last"></span>
-  </div>
+function panguInit () {
+  if (false){
+    GLOBAL_CONFIG_SITE.isPost && panguFn()
+  } else {
+    panguFn()
+  }
+}
 
-  <aside class="sidebar">
-    <div class="sidebar-inner">
-
-      <ul class="sidebar-nav motion-element">
-        <li class="sidebar-nav-toc">
-          文章目录
-        </li>
-        <li class="sidebar-nav-overview">
-          站点概览
-        </li>
-      </ul>
-
-      <!--noindex-->
-      <div class="post-toc-wrap sidebar-panel">
-      </div>
-      <!--/noindex-->
-
-      <div class="site-overview-wrap sidebar-panel">
-        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
-  <p class="site-author-name" itemprop="name">Ma Xiaowei</p>
-  <div class="site-description" itemprop="description"></div>
-</div>
-<div class="site-state-wrap motion-element">
-  <nav class="site-state">
-      <div class="site-state-item site-state-posts">
-          <a href="/archives/">
-        
-          <span class="site-state-item-count">17</span>
-          <span class="site-state-item-name">日志</span>
-        </a>
-      </div>
-      <div class="site-state-item site-state-categories">
-            <a href="/categories/">
-          
-        <span class="site-state-item-count">6</span>
-        <span class="site-state-item-name">分类</span></a>
-      </div>
-      <div class="site-state-item site-state-tags">
-            <a href="/tags/">
-          
-        <span class="site-state-item-count">12</span>
-        <span class="site-state-item-name">标签</span></a>
-      </div>
-  </nav>
-</div>
-
-
-
-      </div>
-
-    </div>
-  </aside>
-  <div id="sidebar-dimmer"></div>
-
-
-      </div>
-    </main>
-
-    <footer class="footer">
-      <div class="footer-inner">
-        
-
-        
-  <div class="beian"><a href="https://beian.miit.gov.cn/" rel="noopener" target="_blank">苏ICP备20016085号-3 </a>
-  </div>
-
-<div class="copyright">
-  
-  &copy; 
-  <span itemprop="copyrightYear">2021</span>
-  <span class="with-love">
-    <i class="fa fa-heart"></i>
-  </span>
-  <span class="author" itemprop="copyrightHolder">Ma Xiaowei</span>
-</div>
-  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
-  </div>
-
-        
-<div class="busuanzi-count">
-  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
-      <span class="post-meta-item-icon">
-        <i class="fa fa-user"></i>
-      </span>
-      <span class="site-uv" title="总访客量">
-        <span id="busuanzi_value_site_uv"></span>
-      </span>
-    </span>
-    <span class="post-meta-divider">|</span>
-    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
-      <span class="post-meta-item-icon">
-        <i class="fa fa-eye"></i>
-      </span>
-      <span class="site-pv" title="总访问量">
-        <span id="busuanzi_value_site_pv"></span>
-      </span>
-    </span>
-</div>
-
-
-
-
-
-
-
-
-      </div>
-    </footer>
-  </div>
-
-  
-  <script src="/lib/anime.min.js"></script>
-  <script src="/lib/velocity/velocity.min.js"></script>
-  <script src="/lib/velocity/velocity.ui.min.js"></script>
-
-<script src="/js/utils.js"></script>
-
-<script src="/js/motion.js"></script>
-
-
-<script src="/js/schemes/pisces.js"></script>
-
-
-<script src="/js/next-boot.js"></script>
-
-
-
-
-  
-
-
-
-
-  
-<script src="//cdn.jsdelivr.net/npm/algoliasearch@4/dist/algoliasearch-lite.umd.js"></script>
-<script src="//cdn.jsdelivr.net/npm/instantsearch.js@4/dist/instantsearch.production.min.js"></script>
-<script src="/js/algolia-search.js"></script>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  
-
-  
-
-
-<script>
-NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
-  NexT.utils.getScript('//unpkg.com/valine/dist/Valine.min.js', () => {
-    var GUEST = ['nick', 'mail', 'link'];
-    var guest = 'nick,mail,link';
-    guest = guest.split(',').filter(item => {
-      return GUEST.includes(item);
-    });
-    new Valine({
-      el         : '#valine-comments',
-      verify     : false,
-      notify     : false,
-      appId      : 'OsM8HgKBpMKcX0iQ9MQ4G3mJ-MdYXbMMI',
-      appKey     : 'fYmodh51BwF6UcglMHXP1ICM',
-      placeholder: "Just go go",
-      avatar     : 'mm',
-      meta       : guest,
-      pageSize   : '10' || 10,
-      visitor    : false,
-      lang       : '' || 'zh-cn',
-      path       : location.pathname,
-      recordIP   : false,
-      serverURLs : ''
-    });
-  }, window.Valine);
-});
-</script>
-
-</body>
-</html>
+document.addEventListener('DOMContentLoaded', panguInit)</script><script src="/js/search/algolia.js"></script><div class="js-pjax"></div><script defer="defer" id="ribbon" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/canvas-ribbon.min.js" size="150" alpha="0.6" zIndex="-1" mobile="false" data-click="true"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
