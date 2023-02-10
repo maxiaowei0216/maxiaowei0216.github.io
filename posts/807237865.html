@@ -1,0 +1,314 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"><title>git常用操作 | Xiaowei's Blog</title><meta name="author" content="Ma Xiaowei"><meta name="copyright" content="Ma Xiaowei"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="推荐一个学习git的网站：Learn Git Branching。 本文记录学习git时总结的一些常用操作，如有错误欢迎在评论区指正。下文图中的c0,c1,…cn实际使用中为提交记录的hash值。 分支操作 新建分支：branch和checkout # 新建分支git branch &lt;bname&gt;# 切换分支git checkout &lt;bname&gt;# 新建并切换分支，实际上">
+<meta property="og:type" content="article">
+<meta property="og:title" content="git常用操作">
+<meta property="og:url" content="https://www.maxiaowei.tech/posts/807237865.html">
+<meta property="og:site_name" content="Xiaowei&#39;s Blog">
+<meta property="og:description" content="推荐一个学习git的网站：Learn Git Branching。 本文记录学习git时总结的一些常用操作，如有错误欢迎在评论区指正。下文图中的c0,c1,…cn实际使用中为提交记录的hash值。 分支操作 新建分支：branch和checkout # 新建分支git branch &lt;bname&gt;# 切换分支git checkout &lt;bname&gt;# 新建并切换分支，实际上">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://www.maxiaowei.tech/img/inspectocat.jpg">
+<meta property="article:published_time" content="2021-12-15T06:01:26.000Z">
+<meta property="article:modified_time" content="2021-12-31T14:40:25.000Z">
+<meta property="article:author" content="Ma Xiaowei">
+<meta property="article:tag" content="git">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://www.maxiaowei.tech/img/inspectocat.jpg"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://www.maxiaowei.tech/posts/807237865.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//hm.baidu.com"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.min.css" media="print" onload="this.media='all'"><script>var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?75c77a06128d0e6c104a661fbbe692bf";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"languages":{"hits_empty":"找不到您查询的内容：${query}"}},
+  translate: undefined,
+  noticeOutdate: {"limitDay":365,"position":"top","messagePrev":"It has been","messageNext":"days since the last update, the content of the article may be outdated."},
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: {"limitCount":50,"languages":{"author":"作者: Ma Xiaowei","link":"链接: ","source":"来源: Xiaowei's Blog","info":"著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。"}},
+  lightbox: 'fancybox',
+  Snackbar: {"chs_to_cht":"你已切换为繁体","cht_to_chs":"你已切换为简体","day_to_night":"你已切换为深色模式","night_to_day":"你已切换为浅色模式","bgLight":"#49b1f5","bgDark":"#1f1f1f","position":"bottom-left"},
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  }
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'git常用操作',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2021-12-31 22:40:25'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+    win.getCSS = url => new Promise((resolve, reject) => {
+      const link = document.createElement('link')
+      link.rel = 'stylesheet'
+      link.href = url
+      link.onload = () => resolve()
+      link.onerror = () => reject()
+      document.head.appendChild(link)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><script src="https://cdn-go.cn/aegis/aegis-sdk/latest/aegis.min.js"></script><script>const aegis = new Aegis({id: 'gQ7VpsgjxjjkljY8nj', uin: 'xxx', reportApiSpeed: true, reportAssetSpeed: true, spa: true}); </script><meta name="generator" content="Hexo 6.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/img/inspectocat.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">24</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">21</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">7</div></a></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="not-top-img" id="page-header"><nav id="nav"><span id="blog-info"><a href="/" title="Xiaowei's Blog"><span class="site-name">Xiaowei's Blog</span></a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search" href="javascript:void(0);"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav></header><main class="layout" id="content-inner"><div id="post"><div id="post-info"><h1 class="post-title">git常用操作</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2021-12-15T06:01:26.000Z" title="发表于 2021-12-15 14:01:26">2021-12-15</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2021-12-31T14:40:25.000Z" title="更新于 2021-12-31 22:40:25">2021-12-31</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/tools/">工具</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">1.9k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>6分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="git常用操作"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span><span class="post-meta-separator">|</span><span class="post-meta-commentcount"><i class="far fa-comments fa-fw post-meta-icon"></i><span class="post-meta-label">评论数:</span><a href="/posts/807237865.html#post-comment"><span class="artalk-count"><i class="fa-solid fa-spinner fa-spin"></i></span></a></span></div></div></div><article class="post-content" id="article-container"><p>推荐一个学习git的网站：<a target="_blank" rel="noopener" href="https://learngitbranching.js.org/?locale=zh_CN">Learn Git Branching</a>。</p>
+<p>本文记录学习git时总结的一些常用操作，如有错误欢迎在评论区指正。下文图中的c0,c1,…cn实际使用中为提交记录的hash值。</p>
+<h1>分支操作</h1>
+<h2 id="新建分支：branch和checkout">新建分支：branch和checkout</h2>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">新建分支</span></span><br><span class="line">git branch &lt;bname&gt;</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">切换分支</span></span><br><span class="line">git checkout &lt;bname&gt;</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">新建并切换分支，实际上是上面两条命令的组合</span></span><br><span class="line">git checkout -b &lt;bname&gt;</span><br></pre></td></tr></table></figure>
+<p>此外，自<code>2.23</code>版本开始，<code>git</code>添加了<code>switch</code>命令，用于切换分支：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">切换分支</span></span><br><span class="line">git switch &lt;bname&gt;</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">新建并切换分支</span></span><br><span class="line">git switch -c &lt;bname&gt;</span><br></pre></td></tr></table></figure>
+<h2 id="合并分支：merge和rebase">合并分支：merge和rebase</h2>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">将bname分支的内容合并到当前分支</span></span><br><span class="line">git merge &lt;bname&gt;</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">将当前分支以onto为起点，形成新的提交树</span></span><br><span class="line">git rebase &lt;onto&gt;</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">将bname分支以onto为起点，形成新的提交树</span></span><br><span class="line">git rebase &lt;onto&gt; &lt;bname&gt;</span><br></pre></td></tr></table></figure>
+<p>下面简要说明下两者间的区别。假设我们当前的开发情况如下，在<code>c1</code>结点创建了一个<code>dev</code>分支进行开发。在开发过程中，在<code>main</code>分支有人提交了代码。此时的提交记录如下图所示：</p>
+<p><img src="https://hexoa.oss-cn-shanghai.aliyuncs.com/img/202112151534480.png!def" alt="image-20211215153431421"></p>
+<p>那么，当我们开发完成后想将代码提交到<code>main</code>分支时，可以有如下两种方式：</p>
+<ul>
+<li>
+<p>merge:</p>
+<ol>
+<li>切换到<code>main</code>分支：<code>git checkout main</code></li>
+<li>执行合并：<code>git merge dev</code></li>
+</ol>
+<p><img src="https://hexoa.oss-cn-shanghai.aliyuncs.com/img/202112160826969.png!def" alt="image-20211216082652882"></p>
+<p>此时<code>main</code>分支就包含了<code>dev</code>分支上的所有内容。</p>
+</li>
+<li>
+<p>rebase:</p>
+<p>在<code>dev</code>分支上可以直接使用<code>git rebase main</code>，将代码提交到<code>main</code>分支上。</p>
+<p><img src="https://hexoa.oss-cn-shanghai.aliyuncs.com/img/202112160832780.png!def" alt="image-20211216083242723"></p>
+<p>可以看到，<code>dev</code>本来是以c1提交为基础开发的，而进行<code>rebase</code>后，git会把<code>dev</code>分支的代码，以<code>main</code>分支的最新代码作为起始点，重新生成新的提交。从结果上看，使用<code>rebase</code>比<code>merge</code>有更加简单清晰的提交记录。</p>
+</li>
+</ul>
+<h2 id="撤销变更：reset和revert">撤销变更：reset和revert</h2>
+<p>在讲撤销变更之前，首先说明一下<code>HEAD</code>和相对引用。</p>
+<p><code>HEAD</code>一般情况下指向当前分支的最新提交（使用<code>git checkout &lt;hash&gt;</code>可以将HEAD指向特定提交）。</p>
+<p><code>^</code>和<code>~</code>符号是相对引用，其中<code>^</code>表示上一级提交，有n个<code>^</code>则表示上n个提交；<code>~</code>后面更上数字，<code>~n</code>表示上n个提交。</p>
+<ul>
+<li>
+<p><code>git reset</code>撤销本地的提交，默认仅回退提交记录，不会删除本地的修改；加上<code>--hard</code>参数会将本地修改全部删除，要谨慎使用。</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">回退到上个版本</span></span><br><span class="line">git reset HEAD^ </span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">回退到上上上个版本</span></span><br><span class="line">git reset HEAD~3</span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p><code>git revert</code> 是用一个新的提交来声明之前的提交要被撤销。</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">回退到上个版本，注意与reset不同，没有^</span></span><br><span class="line">git revert HEAD</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">回退到上上版本</span></span><br><span class="line">git revert HEAD^</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p><img src="https://hexoa.oss-cn-shanghai.aliyuncs.com/img/202112160933990.png!defl" alt="image-20211216093303924"></p>
+<h2 id="修改提交树：cherry-pick和rebase-i">修改提交树：cherry-pick和rebase -i</h2>
+<ul>
+<li>
+<p>cherry-pick是将一个或几个记录应用到当前分支</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">将指定记录转移到当前分支</span></span><br><span class="line">git cherry-pick &lt;hash1&gt; &lt;hash2&gt; ...</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">指定分支的最新提交转移到当前分支</span></span><br><span class="line">git cherry-pick &lt;bname&gt;</span><br></pre></td></tr></table></figure>
+<p><img src="https://hexoa.oss-cn-shanghai.aliyuncs.com/img/202112161054727.png!def" alt="image-20211216105402633"></p>
+</li>
+<li>
+<p>rebase加上<code>-i</code>参数会打开交互式的提交界面，通过它可以调整提交记录、删除不要的提交、和并提交等。</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">修改最近的两次提交</span></span><br><span class="line">git rebase -i HEAD~2</span><br></pre></td></tr></table></figure>
+<p><img src="https://hexoa.oss-cn-shanghai.aliyuncs.com/img/202112161102552.png!def" alt="image-20211216110255505"></p>
+<p>一般是使用的vim编辑器，通过调整各个记录的顺序可以修改提交顺序，按照下方给出的提示，可以删除、编辑之前的提交记录。</p>
+</li>
+</ul>
+<h1>常用操作</h1>
+<h2 id="暂存修改：stash">暂存修改：stash</h2>
+<p>如果已经有了修改，又需要切换到其他分支，可以使用<code>stash</code>暂存已经做出的修改，之后再进行恢复。</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">暂存修改</span></span><br><span class="line">git stash </span><br><span class="line">git stash save &lt;comment&gt;</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">查看</span></span><br><span class="line">git stash list</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">查看修改的文件</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">index可选，不加则默认第一个</span></span><br><span class="line">git stash show [index] # index形式为stash@&#123;num&#125;，即list输出的index</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">查看文件的修改内容</span></span><br><span class="line">git stash show -p [index]</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">应用某个存储，但不会从list中删除</span></span><br><span class="line">git stash apply [index]</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">应用并从list中删除某个存储</span></span><br><span class="line">git stash pop [index]</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">丢弃某个存储</span></span><br><span class="line">git stash drop [index]</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">删除所有的暂存</span></span><br><span class="line">git stash clear</span><br></pre></td></tr></table></figure>
+<h2 id="标签：tag">标签：tag</h2>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">给指定commit打标签，不指定则默认为当前commit</span></span><br><span class="line">git tag &lt;tag&gt; [hash]</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">生成带注释的标签</span></span><br><span class="line">git tag -a &lt;tag&gt; [hash] -m &lt;msg&gt;</span><br></pre></td></tr></table></figure>
+<p>想要查询距离某个提交最近的tag，可以使用<code>describe</code>命令。<strong>默认情况下仅会查询带有注释的标签</strong>，如果想有查询所有标签则可以加上<code>--tags</code>参数。</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">查找距离指定提交最近的标签</span></span><br><span class="line">git describe &lt;commithash&gt; [--tags]</span><br></pre></td></tr></table></figure>
+<p>如果指定的commit处正好有标签，则直接输出标签名，否则输出如下格式的字符串：</p>
+<figure class="highlight text"><table><tr><td class="code"><pre><span class="line"># tag-最近的标签名；num-距离该标签的提交数；hash-本次查询的commit的hash</span><br><span class="line">&lt;tag&gt;-&lt;num&gt;-&lt;hash&gt;</span><br></pre></td></tr></table></figure>
+<h1>远程操作</h1>
+<p>当使用<code>clone</code>命令从远端克隆一个仓库后，本地会有远程分支<code>origin/master</code>（具体名字由远程主机和分支名决定），它反映了远程仓库的状态。</p>
+<h2 id="拉取：pull">拉取：pull</h2>
+<p>在讲<code>pull</code>之前，有必要先说明一下<code>fetch</code>命令，它会从远程仓库下载本地确实的记录，更新本地的远程分支（如<code>origin/master</code>），它不会更改本地的分支和文件。</p>
+<p>默认情况下，<code>git pull</code>命令是<code>fetch</code>+<code>merge</code>的组合，也就可以将本地与远程的文件同步。如果添加<code>--rebase</code>参数，则使用<code>rebase</code>来代替默认的<code>merge</code>操作。</p>
+<h2 id="推送：push">推送：push</h2>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">基本格式为   remotename <span class="built_in">source</span>:dest</span></span><br><span class="line">git push [-u] &lt;remote&gt; &lt;local_branch&gt;:&lt;remote_branch&gt;</span><br></pre></td></tr></table></figure>
+<p><code>-u</code>为<code>--set-upstream</code>的缩写，当推送新的分支到远程仓库时，需要该参数建立与远程仓库的关联。</p>
+<p><code>remote_branch</code>不填，则默认与<code>local_branch</code>相同。</p>
+<p><code>local_branch</code>为空时，可以删除远程分支，如<code>git push origin :dev</code>则会删除远程仓库的<code>dev</code>分支，但本地的<code>dev</code>分支不会删除。</p>
+<p>同理，使用<code>git fetch origin :dev</code>会在本地新建<code>dev</code>分支。</p>
+<div class="note info flat"><p>不建议使用以上两种删除和新建分支的方式，因为这会导致本地与远程的分支联系错乱，需要自己重新指定。</p>
+</div>
+<h1>其他操作</h1>
+<h2 id="合并多个提交为一个提交">合并多个提交为一个提交</h2>
+<p>当在开发过程中，针对同一问题进行了多次提交，如果不想保留历史提交记录而想将之前的多次提交合并为一次提交，则可以使用<code>rebase -i</code>方便地修改之前的提交记录。</p>
+<p>假设之前进行了3次提交，如下所示：</p>
+<p><img src="https://hexoa.oss-cn-shanghai.aliyuncs.com/img/202112312220512.png!def" alt="image-20211231222005298"></p>
+<p>使用<code>git rebase -i HEAD~2</code>合并第2、3两次提交（<code>rebase</code>是将<strong>指定提交后面</strong>的提交进行修改，因此无法合并第1次的提交）。会进入如下界面：</p>
+<p><img src="https://hexoa.oss-cn-shanghai.aliyuncs.com/img/202112312226462.png!def" alt="image-20211231222607355"></p>
+<p>想将3号提交合并到2上，则将3号提交前面的<code>pick</code>修改为<code>squash</code>，最终结果为：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">pick 7973919 2</span><br><span class="line">squash 1b89bd1 3</span><br></pre></td></tr></table></figure>
+<p>将修改的文件保存后进入下一步的编辑提交信息的操作。</p>
+<div class="note info flat"><p>由于我安装<code>git</code>时指定了编辑器是vscode，所以这些编辑操作会在vscode中进行，此时修改完成后关闭标签页即可进入到下一步。如果是默认的<code>vim</code>编辑器，则需要使用<code>wq</code>进行保存后进入下一步。</p>
+</div>
+<p>编辑提交信息界面如下所示：</p>
+<p><img src="https://hexoa.oss-cn-shanghai.aliyuncs.com/img/202112312233860.png!def" alt="image-20211231223337713"></p>
+<p>可以使用<code>#</code>将之前的提交信息注释掉，然后添加本次的提交信息，保存即可完成此次合并提交。</p>
+<p><img src="https://hexoa.oss-cn-shanghai.aliyuncs.com/img/202112312235160.png!def" alt="image-20211231223521044"></p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="https://www.maxiaowei.tech">Ma Xiaowei</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://www.maxiaowei.tech/posts/807237865.html">https://www.maxiaowei.tech/posts/807237865.html</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://www.maxiaowei.tech" target="_blank">Xiaowei's Blog</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/git/">git</a></div><div class="post_share"><div class="social-share" data-image="/img/inspectocat.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/posts/1264147657.html" title="TrueNAS SCALE创建app提示waiting for a volume to be created..."><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">TrueNAS SCALE创建app提示waiting for a volume to be created...</div></div></a></div><div class="next-post pull-right"><a href="/posts/2189133327.html" title="简述几种经典的网络攻击方式"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">简述几种经典的网络攻击方式</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><div><a href="/posts/3681943647.html" title="利用commitizen+commitlint+husky规范代码提交注释"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-08-31</div><div class="title">利用commitizen+commitlint+husky规范代码提交注释</div></div></a></div><div><a href="/posts/2410943014.html" title="使用sparse-checkout命令克隆“部分”代码"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2020-10-20</div><div class="title">使用sparse-checkout命令克隆“部分”代码</div></div></a></div></div></div><hr/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="artalk-wrap"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/img/inspectocat.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">Ma Xiaowei</div><div class="author-info__description"></div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">24</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">21</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">7</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/maxiaowei0216"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/maxiaowei0216" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="mailto:admin@maxiaowei.tech" target="_blank" title="Email"><i class="fas fa-envelope"></i></a></div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">1.</span> <span class="toc-text">分支操作</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%96%B0%E5%BB%BA%E5%88%86%E6%94%AF%EF%BC%9Abranch%E5%92%8Ccheckout"><span class="toc-number">1.1.</span> <span class="toc-text">新建分支：branch和checkout</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%90%88%E5%B9%B6%E5%88%86%E6%94%AF%EF%BC%9Amerge%E5%92%8Crebase"><span class="toc-number">1.2.</span> <span class="toc-text">合并分支：merge和rebase</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%92%A4%E9%94%80%E5%8F%98%E6%9B%B4%EF%BC%9Areset%E5%92%8Crevert"><span class="toc-number">1.3.</span> <span class="toc-text">撤销变更：reset和revert</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BF%AE%E6%94%B9%E6%8F%90%E4%BA%A4%E6%A0%91%EF%BC%9Acherry-pick%E5%92%8Crebase-i"><span class="toc-number">1.4.</span> <span class="toc-text">修改提交树：cherry-pick和rebase -i</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">2.</span> <span class="toc-text">常用操作</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9A%82%E5%AD%98%E4%BF%AE%E6%94%B9%EF%BC%9Astash"><span class="toc-number">2.1.</span> <span class="toc-text">暂存修改：stash</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A0%87%E7%AD%BE%EF%BC%9Atag"><span class="toc-number">2.2.</span> <span class="toc-text">标签：tag</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">3.</span> <span class="toc-text">远程操作</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8B%89%E5%8F%96%EF%BC%9Apull"><span class="toc-number">3.1.</span> <span class="toc-text">拉取：pull</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8E%A8%E9%80%81%EF%BC%9Apush"><span class="toc-number">3.2.</span> <span class="toc-text">推送：push</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">4.</span> <span class="toc-text">其他操作</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%90%88%E5%B9%B6%E5%A4%9A%E4%B8%AA%E6%8F%90%E4%BA%A4%E4%B8%BA%E4%B8%80%E4%B8%AA%E6%8F%90%E4%BA%A4"><span class="toc-number">4.1.</span> <span class="toc-text">合并多个提交为一个提交</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/posts/3660125672.html" title="Unraid community application 插件镜像">Unraid community application 插件镜像</a><time datetime="2022-03-22T08:57:36.000Z" title="发表于 2022-03-22 16:57:36">2022-03-22</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/posts/2391406559.html" title="解决heimdall无法刷新app列表的问题">解决heimdall无法刷新app列表的问题</a><time datetime="2022-03-08T08:46:24.000Z" title="发表于 2022-03-08 16:46:24">2022-03-08</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/posts/3612691073.html" title="在VMware中安装unraid系统">在VMware中安装unraid系统</a><time datetime="2022-03-03T10:41:39.000Z" title="发表于 2022-03-03 18:41:39">2022-03-03</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/posts/2189133327.html" title="简述几种经典的网络攻击方式">简述几种经典的网络攻击方式</a><time datetime="2021-12-29T14:39:29.000Z" title="发表于 2021-12-29 22:39:29">2021-12-29</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/posts/807237865.html" title="git常用操作">git常用操作</a><time datetime="2021-12-15T06:01:26.000Z" title="发表于 2021-12-15 14:01:26">2021-12-15</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2023 By Ma Xiaowei</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div><div class="footer_custom_text"><a target="_blank" rel="noopener" href="https://beian.miit.gov.cn/">苏ICP备20016085号</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div></div></div><div id="search-mask"></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.umd.min.js"></script><script src="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.js"></script><script>function panguFn () {
+  if (typeof pangu === 'object') pangu.autoSpacingPage()
+  else {
+    getScript('https://cdn.jsdelivr.net/npm/pangu/dist/browser/pangu.min.js')
+      .then(() => {
+        pangu.autoSpacingPage()
+      })
+  }
+}
+
+function panguInit () {
+  if (false){
+    GLOBAL_CONFIG_SITE.isPost && panguFn()
+  } else {
+    panguFn()
+  }
+}
+
+document.addEventListener('DOMContentLoaded', panguInit)</script><script src="/js/search/local-search.js"></script><div class="js-pjax"><script>function loadArtalk () {
+  function initArtalk () {
+    window.artalkItem = new Artalk(Object.assign({
+      el: '#artalk-wrap',
+      server: 'https://cm.02160818.xyz',
+      site: 'Xiaowei's Blog',
+      pageKey: location.pathname,
+      darkMode: document.documentElement.getAttribute('data-theme') === 'dark',
+      countEl: '.artalk-count'
+    },null))
+  }
+
+  if (typeof window.artalkItem === 'object') setTimeout(()=>{initArtalk()},200)
+  else {
+    getCSS('https://cdn.jsdelivr.net/npm/artalk/dist/Artalk.min.css')
+    typeof Artalk !== 'function' ? getScript('https://cdn.jsdelivr.net/npm/artalk/dist/Artalk.min.js').then(initArtalk)
+                                : setTimeout(()=>{initArtalk()},200)
+  }
+}
+
+document.getElementById('darkmode').addEventListener('click',()=> {
+  if (typeof window.artalkItem !== 'object') return
+  let isDark = document.documentElement.getAttribute('data-theme') === 'dark'
+  window.artalkItem.setDarkMode(!isDark)
+})
+
+
+if ('Artalk' === 'Artalk' || !false) {
+  if (false) btf.loadComment(document.getElementById('artalk-wrap'), loadArtalk)
+  else loadArtalk()
+} else {
+  function loadOtherComment () {
+    loadArtalk()
+  }
+}</script></div><script defer="defer" id="ribbon" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/canvas-ribbon.min.js" size="150" alpha="0.6" zIndex="-1" mobile="false" data-click="true"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
